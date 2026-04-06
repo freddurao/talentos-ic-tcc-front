@@ -10,6 +10,10 @@
 	UFBA - Instituto de Computação - MATE85 - 2022.1 - Grupo 3
 </h4>
 
+## Architecture
+
+![talentic-arquitetura](https://github.com/user-attachments/assets/22828839-44bb-4bca-8abb-088b1bc3e1ca)
+
 <!-- Summary -->
 
 <h2>Summary</h2>
