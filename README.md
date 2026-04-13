@@ -12,7 +12,7 @@
 
 ## Architecture
 
-![talentic-arquitetura](https://github.com/user-attachments/assets/22828839-44bb-4bca-8abb-088b1bc3e1ca)
+![talentic-arquitetura](https://imgur.com/EkpSZxv)
 
 <!-- Summary -->
 
