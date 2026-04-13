@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
 import { DateBox, SelectBox } from '../../components/FormElements'
 import Layout from '../../components/Layout'
+import ResumeUploader from '../../components/ResumeUploader'
 import TagInput from '../../components/TagInput'
 import Text from '../../components/Text'
 import TextInput from '../../components/TextInput'
@@ -20,7 +20,6 @@ import {
 import { translate } from '../../utils/translations'
 import './styles.css'
 
-// Component that renders the page to edit the user profile
 function EditData() {
   const navigate = useNavigate()
   const { userId } = useAuth()
@@ -32,12 +31,13 @@ function EditData() {
   const [knowledge, setKnowledge] = useState('')
   const [technologies, setTechnologies] = useState('')
   const [languages, setLanguages] = useState('')
-  const [linkResume, setLinkResume] = useState('')
+  // const [linkResume, setLinkResume] = useState('')
 
   const [knowledgeTags, setKnowledgeTags] = useState([])
   const [technologiesTags, setTechnologiesTags] = useState([])
 
   const [hasError, setHasError] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   const user = useGetUserById(userId)
   const profile = useGetProfileById(user && user.profileId, false)
@@ -54,6 +54,49 @@ function EditData() {
   const isKnowledgeInvalid = () => knowledge === ''
   const isTechnologiesInvalid = () => technologies === ''
 
+  const handleResumeExtracted = (data) => {
+    if (!data) return
+
+    if (data.birthDate) setBirthDate(data.birthDate)
+
+    if (data.scholarity) {
+      const validScholarity = jobScholarities.find(
+        (s) => s === data.scholarity || s?.value === data.scholarity
+      )
+      if (validScholarity) {
+        setScholarity(
+          typeof validScholarity === 'string'
+            ? validScholarity
+            : validScholarity.value
+        )
+      }
+    }
+
+    if (data.knowledge) {
+      const tags = data.knowledge
+        .split(';')
+        .map((t) => t.trim())
+        .filter(Boolean)
+      setKnowledgeTags(tags)
+      setKnowledge(tags.join(';'))
+    }
+
+    if (data.technologies) {
+      const tags = data.technologies
+        .split(';')
+        .map((t) => t.trim())
+        .filter(Boolean)
+      setTechnologiesTags(tags)
+      setTechnologies(tags.join(';'))
+    }
+
+    if (data.languages) setLanguages(data.languages)
+
+    if (data.email && !email) setEmail(data.email)
+
+    toast.success('Currículo analisado! Revise os campos preenchidos e salve.')
+  }
+
   const hasProfileChanges = () => {
     if (profile) {
       return (
@@ -62,8 +105,8 @@ function EditData() {
         searchable !== profile.searchable ||
         knowledge !== profile.knowledge ||
         technologies !== profile.technologies ||
-        languages !== profile.languages ||
-        linkResume !== profile.linkResume
+        languages !== profile.languages
+        // linkResume !== profile.linkResume
       )
     }
     return (
@@ -72,13 +115,14 @@ function EditData() {
       searchable !== false ||
       knowledge !== '' ||
       technologies !== '' ||
-      languages !== '' ||
-      linkResume !== ''
+      languages !== ''
+      // linkResume !== ''
     )
   }
 
   const onSave = async (e) => {
     e.preventDefault()
+    setIsSaving(true)
     if (user.email !== email) await updateUser(userId, { email })
     if (hasProfileChanges()) {
       if (
@@ -89,6 +133,7 @@ function EditData() {
       ) {
         toast.error(translate('mandatory_not_filled'))
         setHasError(true)
+        setIsSaving(false)
         return
       }
 
@@ -102,8 +147,8 @@ function EditData() {
             searchable,
             knowledge,
             technologies,
-            languages,
-            linkResume
+            languages
+            // linkResume
           )
         } else {
           await createProfile(
@@ -113,8 +158,8 @@ function EditData() {
             searchable,
             knowledge,
             technologies,
-            languages,
-            linkResume
+            languages
+            // linkResume
           )
         }
       }
@@ -137,6 +182,7 @@ function EditData() {
       })
     }
 
+    setIsSaving(false)
     navigate('/')
   }
 
@@ -165,7 +211,7 @@ function EditData() {
     setTechnologies(profile.technologies)
     setTechnologiesTags(profile.technologies.split(';'))
     setLanguages(profile.languages)
-    setLinkResume(profile.linkResume)
+    // setLinkResume(profile.linkResume)
   }, [profile])
 
   return (
@@ -177,6 +223,10 @@ function EditData() {
           </div>
           {user && (user.profileId === -1 || profile) ? (
             <form autoComplete="off" onSubmit={onSave}>
+              <ResumeUploader
+                onExtracted={handleResumeExtracted}
+                disabled={isSaving}
+              />
               <Text
                 className="is-light is-italic"
                 text="Informações cadastrais"
@@ -227,7 +277,7 @@ function EditData() {
               <div className="form-horizontal">
                 <TagInput
                   className="margin-input"
-                  label="Habilidades comportamentais"
+                  label="Habilidades Comportamentais"
                   autoComplete={false}
                   tags={knowledgeTags}
                   hasError={hasError && isKnowledgeInvalid()}
@@ -236,7 +286,7 @@ function EditData() {
                   selectOptions={skillOptions.map((value) => value.description)}
                 />
                 <TagInput
-                  label="Conhecimentos e tecnologias"
+                  label="Conhecimentos e Tecnologias"
                   autoComplete={false}
                   tags={technologiesTags}
                   hasError={hasError && isTechnologiesInvalid()}
@@ -257,14 +307,17 @@ function EditData() {
                   setValue={setLanguages}
                   maxLength={255}
                 />
-                <TextInput
-                  label={translate('profile_field_resume')}
-                  type="text"
-                  autoComplete={false}
-                  value={linkResume}
-                  setValue={setLinkResume}
-                  maxLength={255}
-                />
+
+                {/*
+<TextInput
+  label={translate('profile_field_resume')}
+  type="text"
+  autoComplete={false}
+  value={linkResume}
+  setValue={setLinkResume}
+  maxLength={255}
+/>
+*/}
               </div>
               <ButtonRectangle
                 className="btn-save is-green"
@@ -275,7 +328,7 @@ function EditData() {
           ) : (
             <Text
               className="is-bold is-blue"
-              text="Carregando usuário e perfil..."
+              text="Carregando usuario e perfil..."
               size={24}
             />
           )}
