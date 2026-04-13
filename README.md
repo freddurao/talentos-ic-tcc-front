@@ -12,7 +12,7 @@
 
 ## Architecture
 
-![talentic-arquitetura](https://i.imgur.com/EkpSZxv.png)
+![talentic-arquitetura](https://imgur.com/a/88ir9rN)
 
 
 
