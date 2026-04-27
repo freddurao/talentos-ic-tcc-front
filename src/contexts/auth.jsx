@@ -21,7 +21,13 @@ export function AuthProvider({ children }) {
   const [authState, setAuthState] = useState(AuthState.IDLE)
 
   const manageUser = (user) => {
-    if (!user || user.token === undefined || user.id === undefined) {
+    if (
+      !user ||
+      !user.token ||
+      !user.id ||
+      user.id === 'undefined' ||
+      user.token === 'undefined'
+    ) {
       setToken(undefined)
       setUserId(undefined)
       setAuthState(AuthState.UNAUTHENTICATED)
@@ -92,9 +98,14 @@ export function AuthProvider({ children }) {
     const tokenLoaded = getWithExpiry(AUTH_TOKEN_KEY)
     const userIdLoaded = getWithExpiry(AUTH_USER_ID_KEY)
 
+    const id =
+      userIdLoaded === 'undefined' || !userIdLoaded ? undefined : userIdLoaded
+    const tkn =
+      tokenLoaded === 'undefined' || !tokenLoaded ? undefined : tokenLoaded
+
     manageUser({
-      token: tokenLoaded ?? undefined,
-      id: userIdLoaded ?? undefined,
+      token: tkn,
+      id,
     })
   }, [])
 

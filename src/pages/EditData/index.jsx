@@ -233,7 +233,9 @@ function EditData() {
                   hasError={hasError && isKnowledgeInvalid()}
                   setValue={updateKnowledgeTags}
                   maxLength={255}
-                  selectOptions={skillOptions.map((value) => value.description)}
+                  selectOptions={skillOptions?.map(
+                    (value) => value.description
+                  )}
                 />
                 <TagInput
                   label="Conhecimentos e tecnologias"
@@ -242,7 +244,7 @@ function EditData() {
                   hasError={hasError && isTechnologiesInvalid()}
                   setValue={updateTechnologiesTags}
                   maxLength={255}
-                  selectOptions={technologyOptions.map(
+                  selectOptions={technologyOptions?.map(
                     (value) => value.description
                   )}
                 />

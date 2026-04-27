@@ -11,7 +11,7 @@ export const useGetUserById = (id) => {
   const [user, setUser] = useState()
 
   useEffect(async () => {
-    if (!id) return
+    if (!id || id === -1 || id === 'undefined') return
     const response = await api.get(`/usuarios/${id}`)
 
     if (response.data.message) {
@@ -35,7 +35,7 @@ export const useGetCreatedJobs = (userId) => {
   const [count, setCount] = useState(0)
 
   const getCreatedJobs = async () => {
-    if (!userId) return
+    if (!userId || userId === -1 || userId === 'undefined') return
     const response = await api.get(`/usuarios/${userId}/vagas/criadas`)
 
     if (response.data.message) {
@@ -64,7 +64,7 @@ export const useGetAppliedJobs = (userId) => {
   const [count, setCount] = useState(0)
 
   const getAppliedJobs = async () => {
-    if (!userId) return
+    if (!userId || userId === -1 || userId === 'undefined') return
     const response = await api.get(`/usuarios/${userId}/vagas/aplicadas`)
 
     if (response.data.message) {

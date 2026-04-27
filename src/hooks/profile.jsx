@@ -42,7 +42,7 @@ export const useGetProfileById = (id, displayError = true) => {
   const [profile, setProfile] = useState()
 
   useEffect(async () => {
-    if (id === -1) return
+    if (!id || id === -1) return
     const response = await api.get(`/perfis/${id}`)
 
     if (response.data.message) {
@@ -61,6 +61,7 @@ export const useGetOwnProfile = (id) => {
   const [bestJobs, setBestJobs] = useState([])
 
   useEffect(async () => {
+    if (!id || id === -1) return
     const response = await api.get(`/perfis/meuperfil/${id}`)
 
     if (response.data.message) {
