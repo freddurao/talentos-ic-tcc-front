@@ -44,12 +44,11 @@ export function AuthProvider({ children }) {
 
     api.interceptors.request.use(
       (config) => {
-        return {
-          ...config,
-          headers: {
-            'x-access-token': getWithExpiry(AUTH_TOKEN_KEY),
-          },
+        const token = getWithExpiry(AUTH_TOKEN_KEY)
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
         }
+        return config
       },
       (error) => Promise.reject(error)
     )
