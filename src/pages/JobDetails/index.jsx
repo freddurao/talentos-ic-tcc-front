@@ -25,7 +25,7 @@ function JobDetails() {
   const params = useParams()
   const navigate = useNavigate()
 
-  const { userId } = useAuth()
+  const { userId, isAuthenticated } = useAuth()
   const { applyToJob } = useJobRoutes()
   const { job, user, userId: jobUserId, profiles } = useGetJobById(params.id)
 
@@ -164,7 +164,10 @@ function JobDetails() {
                     <ButtonRectangle
                       className="is-green"
                       label={translate(getBtnJobTranslation())}
-                      onClick={() => setModalOpened(true)}
+                      onClick={() => {
+                        if (isAuthenticated) setModalOpened(true)
+                        else navigate(`/login?vaga=${params.id}`)
+                      }}
                       disabled={isOwnJob || isJobApplied}
                     />
                   </div>
