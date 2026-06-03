@@ -95,14 +95,6 @@ function ProfilesList() {
 
   return (
     <Layout
-      superHeaderChildren={
-        <ButtonRectangle
-          key="btn-profile"
-          label="Pesquisar Vagas"
-          onClick={() => navigate('/')}
-          className="is-blue header-button"
-        />
-      }
       headerLeftChildren={
         <SearchBox
           className="search-box"

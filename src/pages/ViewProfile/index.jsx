@@ -161,7 +161,7 @@ function ViewProfile() {
   )
   /*eslint-disable */
   return (
-    <Layout isFinalPage>
+    <Layout>
       <div className="view-profile">
         <div className="card">
           {user && (user.profileId === -1 || profile)

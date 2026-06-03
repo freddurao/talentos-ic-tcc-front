@@ -12,20 +12,27 @@ export const useGetJobById = (id) => {
   const [userId, setUserId] = useState()
   const [profiles, setProfiles] = useState()
 
-  useEffect(async () => {
-    if (!id) return
-    const response = await api.get(`/vagas/${id}`)
+  useEffect(() => {
+    const fetchJob = async () => {
+      if (!id) return
+      try {
+        const response = await api.get(`/vagas/${id}`)
 
-    if (response.data.message && response.data.error) {
-      toast.error(response.data.message)
-      return
+        if (response.data.message && response.data.error) {
+          toast.error(response.data.message)
+          return
+        }
+
+        setJob(response.data.job)
+        setUser(response.data.user)
+        setJobId(response.data.jobId)
+        setUserId(response.data.userId)
+        setProfiles(response.data.recmd_profiles)
+      } catch (err) {
+        console.error(err)
+      }
     }
-
-    setJob(response.data.job)
-    setUser(response.data.user)
-    setJobId(response.data.jobId)
-    setUserId(response.data.userId)
-    setProfiles(response.data.recmd_profiles)
+    fetchJob()
   }, [id])
 
   return { job, user, jobId, userId, profiles }
@@ -153,13 +160,20 @@ export const useJobRoutes = () => {
 export const getFeedbackStatus = (id) => {
   const [status, setStatus] = useState('')
 
-  useEffect(async () => {
-    const response = await api.get(`/vagas/feedback/${id}`)
-    if (response.data.error && response.data.message) {
-      toast.error(response.data.message)
-      return
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const response = await api.get(`/vagas/feedback/${id}`)
+        if (response.data.error && response.data.message) {
+          toast.error(response.data.message)
+          return
+        }
+        setStatus(response.data)
+      } catch (err) {
+        console.error(err)
+      }
     }
-    setStatus(response.data)
+    fetchFeedback()
   }, [id])
   return status
 }
@@ -169,34 +183,44 @@ export const useGetJobs = (pageNumber, itemsPerPage, filters) => {
   const [totalPages, setTotalPages] = useState(0)
   const [count, setCount] = useState(0)
 
-  const buildQuery = () => {
-    const query = []
-    query.push(`pageNumber=${pageNumber}`)
-    query.push(`itemsPerPage=${itemsPerPage}`)
-    Object.keys(filters).forEach((field) => {
-      if (field === 'salary') {
-        query.push(`min=${filters[field].min}`)
-        query.push(`max=${filters[field].max}`)
-      } else if (field === 'workload') {
-        query.push(`chmin=${filters[field].min}`)
-        query.push(`chmax=${filters[field].max}`)
-      } else if (filters[field]) query.push(`${field}=${filters[field]}`)
-    })
-    return query.join('&')
-  }
+  // Use JSON.stringify for deep comparison in dependency array
+  const filtersString = JSON.stringify(filters)
 
-  useEffect(async () => {
-    const response = await api.get(`/vagas?${buildQuery()}`)
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const buildQuery = () => {
+        const query = []
+        query.push(`pageNumber=${pageNumber}`)
+        query.push(`itemsPerPage=${itemsPerPage}`)
+        Object.keys(filters).forEach((field) => {
+          if (field === 'salary') {
+            query.push(`min=${filters[field].min}`)
+            query.push(`max=${filters[field].max}`)
+          } else if (field === 'workload') {
+            query.push(`chmin=${filters[field].min}`)
+            query.push(`chmax=${filters[field].max}`)
+          } else if (filters[field]) query.push(`${field}=${filters[field]}`)
+        })
+        return query.join('&')
+      }
 
-    if (response.data.error && response.data.message) {
-      toast.error(response.data.message)
-      return
+      try {
+        const response = await api.get(`/vagas?${buildQuery()}`)
+
+        if (response.data.error && response.data.message) {
+          toast.error(response.data.message)
+          return
+        }
+
+        setJobs(response.data.rows)
+        setCount(response.data.count)
+        setTotalPages(Math.ceil(response.data.count / itemsPerPage))
+      } catch (err) {
+        console.error(err)
+      }
     }
-
-    setJobs(response.data.rows)
-    setCount(response.data.count)
-    setTotalPages(Math.ceil(response.data.count / itemsPerPage))
-  }, [pageNumber, itemsPerPage, filters])
+    fetchJobs()
+  }, [pageNumber, itemsPerPage, filtersString])
 
   return { jobs, totalPages, count }
 }

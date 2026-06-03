@@ -10,21 +10,28 @@ export const useGetUserById = (id) => {
   const navigate = useNavigate()
   const [user, setUser] = useState()
 
-  useEffect(async () => {
-    if (!id || id === -1 || id === 'undefined') return
-    const response = await api.get(`/usuarios/${id}`)
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!id || id === -1 || id === 'undefined') return
+      try {
+        const response = await api.get(`/usuarios/${id}`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
+        if (response.data.message) {
+          if (response.data.error) {
+            toast.error(response.data.message)
+            handleNotAuthorized(response, navigate)
+            return
+          }
+          toast.success(response.data.message)
+        }
+
+        setUser(response.data)
+      } catch (err) {
+        console.error(err)
       }
-      toast.success(response.data.message)
     }
-
-    setUser(response.data)
-  }, [id])
+    fetchUser()
+  }, [id, navigate])
 
   return user
 }

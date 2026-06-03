@@ -7,19 +7,14 @@ import BottomHeader from './BottomHeader'
 function Layout({
   children,
   isFinalPage,
-  returnUrl,
   superHeaderChildren,
   headerLeftChildren,
   headerRightChildren,
 }) {
   return (
     <div className="layout">
-      <Header
-        hasReturnButton={isFinalPage}
-        returnUrl={returnUrl}
-        headerChildren={superHeaderChildren}
-      />
-      {!isFinalPage && (
+      <Header headerChildren={superHeaderChildren} />
+      {!isFinalPage && (headerLeftChildren || headerRightChildren) && (
         <BottomHeader
           leftChildren={headerLeftChildren}
           rightChildren={headerRightChildren}
@@ -36,7 +31,6 @@ Layout.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
   ]),
   isFinalPage: PropTypes.bool,
-  returnUrl: PropTypes.string,
   superHeaderChildren: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
@@ -54,7 +48,6 @@ Layout.propTypes = {
 Layout.defaultProps = {
   children: <div />,
   isFinalPage: false,
-  returnUrl: '',
   superHeaderChildren: undefined,
   headerLeftChildren: undefined,
   headerRightChildren: undefined,

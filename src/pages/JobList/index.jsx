@@ -113,12 +113,6 @@ function JobList() {
           onClick={createJob}
           className="is-blue header-button"
         />,
-        <ButtonRectangle
-          key="btn-profile"
-          label="Pesquisar Perfis"
-          onClick={() => navigate('/perfis')}
-          className="is-blue header-button"
-        />,
         isAuthenticated ? (
           <ButtonRectangle
             key="btn-jobs"

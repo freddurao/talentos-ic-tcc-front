@@ -76,7 +76,7 @@ function JobDetails() {
   }
 
   return (
-    <Layout isFinalPage>
+    <Layout>
       <ConfirmModal
         title="Aplicar para Vaga"
         description={`Deseja realmente aplicar para a vaga "${
