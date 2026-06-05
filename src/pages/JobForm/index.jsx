@@ -1,16 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
 import { DateBox, SelectBox } from '../../components/FormElements'
 import Layout from '../../components/Layout'
 import ConfirmModal from '../../components/Modals/ConfirmModal'
-import TagInput from '../../components/TagInput'
 import Text from '../../components/Text'
 import TextInput from '../../components/TextInput'
-import { useGetEmailLists, useGetEmailListState } from '../../hooks/admin'
 import { useGetJobById, useJobRoutes } from '../../hooks/jobs'
-import { useSearchObject } from '../../hooks/url'
 import useAuth from '../../hooks/useAuth'
 import {
   DEFAULT_SALARY,
@@ -18,13 +15,11 @@ import {
   jobTypes,
 } from '../../utils/constants/project'
 import { translate } from '../../utils/translations'
-import { isEmailValid } from '../../utils/validations'
 import './styles.css'
 
 // Component that renders the page to create, edit or delete a job
 function JobForm() {
   const navigate = useNavigate()
-  const [search] = useSearchObject()
 
   const params = useParams()
   const isCreationForm = params.type === 'criar'
@@ -32,9 +27,6 @@ function JobForm() {
   const { userId } = useAuth()
 
   const { job, jobId } = useGetJobById(params.id)
-
-  const { emailLists } = useGetEmailLists()
-  const { state: emailListState } = useGetEmailListState()
 
   const [deleteModalOpened, setDeleteModalOpened] = useState(false)
   const [saveModalOpened, setSaveModalOpened] = useState(false)
@@ -49,13 +41,10 @@ function JobForm() {
   const [type, setType] = useState('')
   const [workload, setWorkload] = useState('')
   const [salary, setSalary] = useState(DEFAULT_SALARY)
-  const [emailsToSend, setEmailsToSend] = useState([])
 
   const [hasError, setHasError] = useState(false)
 
   const { createJob, updateJob, deleteJob } = useJobRoutes()
-
-  const fromHome = useMemo(() => search.home === '1', [search])
 
   const isTitleInvalid = () => title === ''
   const isDescriptionInvalid = () => description === ''
@@ -111,8 +100,7 @@ function JobForm() {
           salary || DEFAULT_SALARY,
           endingDate,
           startingDate,
-          userId,
-          emailsToSend
+          userId
         )
       } else if (job) {
         await updateJob(
@@ -144,18 +132,6 @@ function JobForm() {
     await deleteJob(jobId).then(() => {
       navigate('/minhasvagas?criadas=1')
     })
-  }
-
-  const updateEmailToSend = (emails) => {
-    setEmailsToSend(
-      emails.filter((email) => {
-        if (!isEmailValid(email)) {
-          toast.error(`O e-mail '${email}' não é válido, digite novamente!`)
-          return false
-        }
-        return true
-      })
-    )
   }
 
   useEffect(() => {
@@ -266,41 +242,28 @@ function JobForm() {
             maxLength={255}
           />
         </div>
-        {isCreationForm ? (
-          <>
-            {emailListState && (
-              <div className="form-horizontal">
-                <TagInput
-                  className="tag-input"
-                  label="Divulgar vaga para quais listas de e-mail?"
-                  autoComplete={false}
-                  tags={emailsToSend}
-                  setValue={updateEmailToSend}
-                  selectOptions={emailLists.map((emailList) => emailList.email)}
-                  creatable={false}
-                />
-              </div>
-            )}
+        <div className="form-horizontal">
+          {isCreationForm ? (
             <ButtonRectangle
               className="btn-save is-blue"
               label="Criar Vaga"
               isSubmit
             />
-          </>
-        ) : (
-          <div className="form-horizontal">
-            <ButtonRectangle
-              className="btn-save is-red margin-input"
-              label="Deletar Vaga"
-              onClick={() => setDeleteModalOpened(true)}
-            />
-            <ButtonRectangle
-              className="btn-save is-green"
-              label="Salvar Vaga"
-              isSubmit
-            />
-          </div>
-        )}
+          ) : (
+            <>
+              <ButtonRectangle
+                className="btn-save is-red margin-input"
+                label="Deletar Vaga"
+                onClick={() => setDeleteModalOpened(true)}
+              />
+              <ButtonRectangle
+                className="btn-save is-green"
+                label="Salvar Vaga"
+                isSubmit
+              />
+            </>
+          )}
+        </div>
       </form>
     </>
   )
@@ -310,7 +273,7 @@ function JobForm() {
   )
 
   return (
-    <Layout returnUrl={fromHome ? '/' : ''} isFinalPage>
+    <Layout>
       <ConfirmModal
         title="Deletar Vaga"
         description={`Deseja realmente deletar a vaga "${

@@ -10,20 +10,27 @@ export const useGetTechnologies = () => {
 
   const [technologies, setTechnologies] = useState([])
 
-  useEffect(async () => {
-    const response = await api.get(`/tecnologias`)
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      try {
+        const response = await api.get(`/tecnologias`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
+        if (response.data.message) {
+          if (response.data.error) {
+            toast.error(response.data.message)
+            handleNotAuthorized(response, navigate)
+            return
+          }
+          toast.success(response.data.message)
+        }
+
+        setTechnologies(response.data.rows)
+      } catch (err) {
+        console.error(err)
       }
-      toast.success(response.data.message)
     }
-
-    setTechnologies(response.data.rows)
-  }, [])
+    fetchTechnologies()
+  }, [navigate])
 
   return technologies
 }

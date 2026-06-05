@@ -9,20 +9,27 @@ export const useGetSkills = () => {
   const navigate = useNavigate()
   const [skills, setSkills] = useState([])
 
-  useEffect(async () => {
-    const response = await api.get(`/habilidades`)
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await api.get(`/habilidades`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
+        if (response.data.message) {
+          if (response.data.error) {
+            toast.error(response.data.message)
+            handleNotAuthorized(response, navigate)
+            return
+          }
+          toast.success(response.data.message)
+        }
+
+        setSkills(response.data.rows)
+      } catch (err) {
+        console.error(err)
       }
-      toast.success(response.data.message)
     }
-
-    setSkills(response.data.rows)
-  }, [])
+    fetchSkills()
+  }, [navigate])
 
   return skills
 }

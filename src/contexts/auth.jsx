@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useCallback, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
+import jwtDecode from 'jwt-decode'
 import api from '../api'
 import { getWithExpiry, saveWithExpiry } from '../utils/object'
 
@@ -18,40 +19,32 @@ const AUTH_USER_ID_KEY = '@vagas/user_id'
 export function AuthProvider({ children }) {
   const [token, setToken] = useState()
   const [userId, setUserId] = useState()
+  const [user, setUser] = useState()
   const [authState, setAuthState] = useState(AuthState.IDLE)
 
-  const manageUser = (user) => {
+  const manageUser = (userData) => {
     if (
-      !user ||
-      !user.token ||
-      !user.id ||
-      user.id === 'undefined' ||
-      user.token === 'undefined'
+      !userData ||
+      !userData.token ||
+      !userData.id ||
+      userData.id === 'undefined' ||
+      userData.token === 'undefined'
     ) {
       setToken(undefined)
       setUserId(undefined)
+      setUser(undefined)
       setAuthState(AuthState.UNAUTHENTICATED)
       localStorage.removeItem(AUTH_TOKEN_KEY)
       localStorage.removeItem(AUTH_USER_ID_KEY)
       return
     }
 
-    setToken(user.token)
-    setUserId(user.id)
+    setToken(userData.token)
+    setUserId(userData.id)
+    setUser(userData)
     setAuthState(AuthState.AUTHENTICATED)
-    saveWithExpiry(AUTH_TOKEN_KEY, user.token, 7200000)
-    saveWithExpiry(AUTH_USER_ID_KEY, user.id, 7200000)
-
-    api.interceptors.request.use(
-      (config) => {
-        const token = getWithExpiry(AUTH_TOKEN_KEY)
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
-      },
-      (error) => Promise.reject(error)
-    )
+    saveWithExpiry(AUTH_TOKEN_KEY, userData.token, 7200000)
+    saveWithExpiry(AUTH_USER_ID_KEY, userData.id, 7200000)
   }
 
   const login = useCallback(async (email, password) => {
@@ -93,7 +86,7 @@ export function AuthProvider({ children }) {
     manageUser(undefined)
   }, [])
 
-  const loadToken = useCallback(() => {
+  const loadToken = useCallback(async () => {
     const tokenLoaded = getWithExpiry(AUTH_TOKEN_KEY)
     const userIdLoaded = getWithExpiry(AUTH_USER_ID_KEY)
 
@@ -102,10 +95,50 @@ export function AuthProvider({ children }) {
     const tkn =
       tokenLoaded === 'undefined' || !tokenLoaded ? undefined : tokenLoaded
 
-    manageUser({
-      token: tkn,
-      id,
-    })
+    if (tkn && id) {
+      try {
+        const decoded = jwtDecode(tkn)
+
+        // Check if token is expired
+        const now = Date.now() / 1000
+        if (decoded.exp && decoded.exp < now) {
+          throw new Error('Token expirado')
+        }
+
+        // Set initial state from token to avoid "Usuário" placeholder
+        const initialState = {
+          token: tkn,
+          id,
+          name: decoded.name || 'Usuário', // Fallback if name is in token
+          role: decoded.role,
+        }
+
+        setToken(tkn)
+        setUserId(id)
+        setUser(initialState)
+        setAuthState(AuthState.AUTHENTICATED)
+
+        try {
+          const response = await api.get(`/usuarios/${id}`)
+          // Merge API data with token, ensuring role and name are preserved
+          const fullUser = {
+            ...response.data,
+            token: tkn,
+          }
+          setUser(fullUser)
+        } catch (apiErr) {
+          console.error(
+            'Erro ao buscar detalhes do usuário, mantendo sessão básica',
+            apiErr
+          )
+        }
+      } catch (err) {
+        console.error('Sessão inválida ou expirada', err)
+        manageUser(undefined)
+      }
+    } else {
+      manageUser(undefined)
+    }
   }, [])
 
   const isAuthenticated = useMemo(
@@ -122,6 +155,7 @@ export function AuthProvider({ children }) {
         isIdle,
         token,
         userId,
+        user,
         state: authState,
         login,
         register,

@@ -5,49 +5,68 @@ import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
 
-export const useGetEmailLists = () => {
+export const useGetUsers = () => {
   const navigate = useNavigate()
-  const [emailLists, setEmailLists] = useState([])
-
+  const [users, setUsers] = useState([])
+  const [count, setCount] = useState(0)
   const [fetch, setFetch] = useState(true)
 
   const refresh = () => setFetch(true)
 
-  useEffect(async () => {
-    if (!fetch) return
+  useEffect(() => {
+    const getUsers = async () => {
+      if (!fetch) return
 
-    const response = await api.get(`/email-list`)
-
-    if (response.data.message && response.data.error) {
-      toast.error(response.data.message)
-      handleNotAuthorized(response, navigate)
-      return
+      try {
+        const response = await api.get(`/usuarios`)
+        if (response.data.error) {
+          toast.error(response.data.message)
+          handleNotAuthorized(response, navigate)
+        } else {
+          setUsers(response.data.rows)
+          setCount(response.data.count)
+        }
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setFetch(false)
+      }
     }
+    getUsers()
+  }, [fetch, navigate])
 
-    setFetch(false)
-    setEmailLists(response.data.rows)
-  }, [fetch])
-
-  return { emailLists, refresh }
+  return { users, count, refresh }
 }
 
-export const useGetEmailListState = () => {
+export const useGetCompanyRequests = () => {
   const navigate = useNavigate()
-  const [state, setState] = useState()
+  const [requests, setRequests] = useState([])
+  const [fetch, setFetch] = useState(true)
 
-  useEffect(async () => {
-    const response = await api.get(`/email-list/verificacao`)
+  const refresh = () => setFetch(true)
 
-    if (response.data.message && response.data.error) {
-      toast.error(response.data.message)
-      handleNotAuthorized(response, navigate)
-      return
+  useEffect(() => {
+    const getRequests = async () => {
+      if (!fetch) return
+
+      try {
+        const response = await api.get(`/empresas/pendentes`)
+        if (response.data.error) {
+          toast.error(response.data.message)
+          handleNotAuthorized(response, navigate)
+        } else {
+          setRequests(response.data)
+        }
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setFetch(false)
+      }
     }
+    getRequests()
+  }, [fetch, navigate])
 
-    setState(response.data.status)
-  }, [])
-
-  return { state }
+  return { requests, refresh }
 }
 
 export const useAdminRoutes = () => {
@@ -64,63 +83,87 @@ export const useAdminRoutes = () => {
     handleNotAuthorized(response, navigate)
   }
 
-  const manageEmailListState = async (state) => {
-    const response = await api.patch(`/email-list`, { state })
-
-    if (response.data.message) {
-      if (response.data.error) toast.error(response.data.message)
-      else toast.success(response.data.message)
+  const requestCompany = async (data) => {
+    try {
+      const response = await api.post(`/empresas/solicitacao`, data)
+      if (response.data.error) {
+        toast.error(response.data.message)
+      } else {
+        toast.success('Solicitação enviada com sucesso!')
+        return true
+      }
+    } catch (err) {
+      toast.error('Erro ao enviar solicitação.')
     }
-
-    handleNotAuthorized(response, navigate)
+    return false
   }
 
-  const createEmailList = async (emails, state) => {
-    return new Promise((resolve, reject) => {
-      api
-        .post(
-          `/email-list`,
-          emails.map((email) => ({ email, isActive: state }))
-        )
-        .then((response) => {
-          if (response.data.message) {
-            if (response.data.error) {
-              toast.error(response.data.message)
-              handleNotAuthorized(response, navigate)
-              reject()
-            } else {
-              toast.success(response.data.message)
-              resolve()
-            }
-          }
-        })
-    })
+  const approveCompany = async (id) => {
+    try {
+      const response = await api.patch(`/empresas/aprovar/${id}`)
+      if (response.data.error) {
+        toast.error(response.data.message)
+      } else {
+        toast.success('Empresa aprovada!')
+        return true
+      }
+    } catch (err) {
+      toast.error('Erro ao aprovar empresa.')
+    }
+    return false
   }
 
-  const deleteEmailList = async (ids) => {
-    return new Promise((resolve, reject) => {
-      api
-        .delete(`/email-list/${ids.join(',')}`)
-        .then((response) => {
-          if (response.data.message) {
-            if (response.data.error) {
-              toast.error(response.data.message)
-              handleNotAuthorized(response, navigate)
-              reject()
-            } else {
-              toast.success(response.data.message)
-              resolve()
-            }
-          }
-        })
-        .catch(reject)
-    })
+  const rejectCompany = async (id) => {
+    try {
+      const response = await api.patch(`/empresas/rejeitar/${id}`)
+      if (response.data.error) {
+        toast.error(response.data.message)
+      } else {
+        toast.success('Solicitação rejeitada.')
+        return true
+      }
+    } catch (err) {
+      toast.error('Erro ao rejeitar empresa.')
+    }
+    return false
+  }
+
+  const updateUser = async (id, data) => {
+    try {
+      const response = await api.patch(`/usuarios/${id}`, data)
+      if (response.data.error) {
+        toast.error(response.data.message)
+      } else {
+        toast.success('Usuário atualizado com sucesso!')
+        return true
+      }
+    } catch (err) {
+      toast.error('Erro ao atualizar usuário.')
+    }
+    return false
+  }
+
+  const deleteUser = async (id) => {
+    try {
+      const response = await api.delete(`/usuarios/${id}`)
+      if (response.data.error) {
+        toast.error(response.data.message)
+      } else {
+        toast.success('Usuário excluído com sucesso!')
+        return true
+      }
+    } catch (err) {
+      toast.error('Erro ao excluir usuário.')
+    }
+    return false
   }
 
   return {
     sendInvite,
-    manageEmailListState,
-    createEmailList,
-    deleteEmailList,
+    requestCompany,
+    approveCompany,
+    rejectCompany,
+    updateUser,
+    deleteUser,
   }
 }

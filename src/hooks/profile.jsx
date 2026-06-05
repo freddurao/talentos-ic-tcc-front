@@ -10,30 +10,39 @@ export const useGetProfiles = (pageNumber, itemsPerPage, filters) => {
   const [totalPages, setTotalPages] = useState(0)
   const [count, setCount] = useState(0)
 
-  const buildQuery = () => {
-    const query = []
-    query.push(`pageNumber=${pageNumber}`)
-    query.push(`itemsPerPage=${itemsPerPage}`)
-    Object.keys(filters).forEach((field) => {
-      if (field === 'filter' && filters[field]) {
-        query.push(`technologies=${filters[field]}`)
-      } else if (filters[field]) query.push(`${field}=${filters[field]}`)
-    })
-    return query.join('&')
-  }
+  const filtersString = JSON.stringify(filters)
 
-  useEffect(async () => {
-    const response = await api.get(`/perfis?${buildQuery()}`)
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      const buildQuery = () => {
+        const query = []
+        query.push(`pageNumber=${pageNumber}`)
+        query.push(`itemsPerPage=${itemsPerPage}`)
+        Object.keys(filters).forEach((field) => {
+          if (field === 'filter' && filters[field]) {
+            query.push(`technologies=${filters[field]}`)
+          } else if (filters[field]) query.push(`${field}=${filters[field]}`)
+        })
+        return query.join('&')
+      }
 
-    if (response.data.error && response.data.message) {
-      toast.error(response.data.message)
-      return
+      try {
+        const response = await api.get(`/perfis?${buildQuery()}`)
+
+        if (response.data.error && response.data.message) {
+          toast.error(response.data.message)
+          return
+        }
+
+        setProfiles(response.data.rows)
+        setCount(response.data.count)
+        setTotalPages(Math.ceil(response.data.count / itemsPerPage))
+      } catch (err) {
+        console.error(err)
+      }
     }
-
-    setProfiles(response.data.rows)
-    setCount(response.data.count)
-    setTotalPages(Math.ceil(response.data.count / itemsPerPage))
-  }, [pageNumber, itemsPerPage, filters])
+    fetchProfiles()
+  }, [pageNumber, itemsPerPage, filtersString])
 
   return { profiles, totalPages, count }
 }
@@ -41,17 +50,24 @@ export const useGetProfiles = (pageNumber, itemsPerPage, filters) => {
 export const useGetProfileById = (id, displayError = true) => {
   const [profile, setProfile] = useState()
 
-  useEffect(async () => {
-    if (!id || id === -1) return
-    const response = await api.get(`/perfis/${id}`)
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!id || id === -1) return
+      try {
+        const response = await api.get(`/perfis/${id}`)
 
-    if (response.data.message) {
-      if (displayError) toast.error(response.data.message)
-      return
+        if (response.data.message) {
+          if (displayError) toast.error(response.data.message)
+          return
+        }
+
+        setProfile(response.data)
+      } catch (err) {
+        console.error(err)
+      }
     }
-
-    setProfile(response.data)
-  }, [id])
+    fetchProfile()
+  }, [id, displayError])
 
   return profile
 }
@@ -60,21 +76,28 @@ export const useGetOwnProfile = (id) => {
   const navigate = useNavigate()
   const [bestJobs, setBestJobs] = useState([])
 
-  useEffect(async () => {
-    if (!id || id === -1) return
-    const response = await api.get(`/perfis/meuperfil/${id}`)
+  useEffect(() => {
+    const fetchOwnProfile = async () => {
+      if (!id || id === -1) return
+      try {
+        const response = await api.get(`/perfis/meuperfil/${id}`)
 
-    if (response.data.message) {
-      if (response.data.error) {
-        toast.error(response.data.message)
-        handleNotAuthorized(response, navigate)
-        return
+        if (response.data.message) {
+          if (response.data.error) {
+            toast.error(response.data.message)
+            handleNotAuthorized(response, navigate)
+            return
+          }
+          toast.success(response.data.message)
+        }
+
+        setBestJobs(response.data)
+      } catch (err) {
+        console.error(err)
       }
-      toast.success(response.data.message)
     }
-
-    setBestJobs(response.data)
-  }, [id])
+    fetchOwnProfile()
+  }, [id, navigate])
   return bestJobs
 }
 
