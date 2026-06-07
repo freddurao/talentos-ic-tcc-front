@@ -11,6 +11,8 @@ import { translate } from '../../utils/translations'
 import { keepQueryOnUrl } from '../../utils/conversions'
 import { useSearchObject } from '../../hooks/url'
 import './styles.css'
+import ResetPasswordModal from '../../components/Modals/ResetPassword'
+import { usePasswordRecovery } from '../../hooks/user'
 
 // Component that renders the page to login
 function Login() {
@@ -27,7 +29,6 @@ function Login() {
   const hasCreateJob = useMemo(() => search.criarvaga === '1', [search])
 
   const navigateToJobList = () => navigate('/')
-  const navigateToForgotPassword = () => navigate('/recuperarsenha')
   const navigateToRegister = () =>
     navigate(keepQueryOnUrl('/register', 'criarvaga=1', hasCreateJob))
 
@@ -37,6 +38,11 @@ function Login() {
   const isFieldsInvalid = () => {
     return isEmailInvalid() || isPasswordInvalid()
   }
+
+  const [resetPasswordModalOpened, setResetPasswordModalOpened] =
+    useState(false)
+  const [emailResetPassword, setEmailResetPassword] = useState('')
+  const { sendRecoveryLink } = usePasswordRecovery()
 
   const submitLogin = async (e) => {
     e.preventDefault()
@@ -53,25 +59,45 @@ function Login() {
     }
   }
 
+  const handleResetPasswordConfirm = () => {
+    if (!isEmailValid(emailResetPassword)) {
+      toast.error('Por favor, digite um e-mail válido!')
+      return
+    }
+
+    sendRecoveryLink({ email: emailResetPassword })
+      .then(() =>
+        toast.success('Link enviado para o e-mail caso a conta exista!')
+      )
+      .catch(() => toast.error('Algo não funcionou como esperado'))
+    setResetPasswordModalOpened(false)
+  }
+
   return (
     <div className="auth-page">
+      <ResetPasswordModal
+        title="Recuperar Acesso"
+        description="Insira o email cadastrado no sistema para receber o link de recuperação de senha."
+        emailResetPassword={emailResetPassword}
+        onEmailChange={setEmailResetPassword}
+        onCancel={() => setResetPasswordModalOpened(false)}
+        onConfirm={() => handleResetPasswordConfirm()}
+        opened={resetPasswordModalOpened}
+      />
       <div className="auth-left-container">
-        <IconIC height={100} />
-        <div className="auth-title-container">
-          <Text
-            className="is-bold is-white"
-            text={translate('site_name')}
-            size={48}
-          />
-          <Text
-            className="auth-title"
-            text="Instituto de Computação da UFBA"
-            size={20}
-          />
-        </div>
-        <hr />
+        <IconIC height={150} />
         <Text
-          className="auth-subtitle is-light"
+          className="is-bold is-white"
+          text={translate('site_name')}
+          size={48}
+        />
+        <Text
+          className="is-white"
+          text="Instituto de Computação da UFBA"
+          size={30}
+        />
+        <Text
+          className="auth-subtitle is-white is-light"
           text="Bem-vindo(a) de volta!"
           size={24}
         />
@@ -79,7 +105,7 @@ function Login() {
       <div className="auth-right-container">
         <div className="card">
           <div className="auth-header">
-            <Text className="is-bold is-primary" text="Login" size={24} />
+            <Text className="is-bold is-blue" text="Login" size={24} />
             <ButtonArrow onClick={navigateToJobList} />
           </div>
           <form onSubmit={submitLogin}>
@@ -104,7 +130,7 @@ function Login() {
           <button
             className="button is-ghost btn-reset-password"
             type="button"
-            onClick={navigateToForgotPassword}
+            onClick={() => setResetPasswordModalOpened(true)}
           >
             <Text
               className="is-gray is-italic"
@@ -118,7 +144,7 @@ function Login() {
             onClick={navigateToRegister}
           >
             <Text
-              className="is-bold is-primary"
+              className="is-bold is-blue"
               text="Não tem uma conta? Cadastre-se"
               size={16}
             />

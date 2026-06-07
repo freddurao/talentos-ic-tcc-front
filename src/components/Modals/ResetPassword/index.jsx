@@ -15,7 +15,18 @@ function ResetPasswordModal({
 }) {
   return (
     <div className={`modal ${opened ? 'is-active' : ''} modal-reset-password`}>
-      <div className="modal-background" />
+      <div
+        className="modal-background"
+        onClick={onCancel}
+        role="button"
+        tabIndex="0"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === 'Escape') {
+            onCancel()
+          }
+        }}
+        aria-label="Fechar modal"
+      />
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">{title}</p>
@@ -24,15 +35,16 @@ function ResetPasswordModal({
           <p className="modal-reset-password-description">{description}</p>
           <TextInput
             className="modal-reset-password-email-receiver"
-            placeholder="Email"
+            placeholder="Digite seu e-mail"
             setValue={onEmailChange}
             value={emailResetPassword}
             type="email"
+            icon="fa-solid fa-envelope"
           />
         </section>
         <footer className="modal-card-foot">
           <ButtonRectangle
-            className="is-red"
+            className="is-white"
             label="Cancelar"
             onClick={onCancel}
           />

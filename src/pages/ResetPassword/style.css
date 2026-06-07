@@ -1,87 +1,23 @@
-.auth-page {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  background-color: var(--color-background);
+.reset-password-page {
+  margin: 50px;
+  padding: 35px;
+  background-color: var(--color-one);
+  -webkit-box-shadow: var(--shadow-default);
+          box-shadow: var(--shadow-default);
+  border-radius: var(--border-radius);
 }
 
-.auth-left-container {
-  background-color: var(--color-primary);
-  display: flex;
-  width: 50%;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: column;
-  padding: 80px;
-}
-
-.auth-right-container {
-  display: flex;
-  width: 50%;
-  padding: 40px;
-  justify-content: center;
-  align-items: center;
-}
-
-.auth-subtitle {
-  margin-top: 40px;
-}
-
-.auth-page .card {
-  padding: 40px;
-  display: flex;
-  width: 100%;
-  max-width: 450px;
-}
-
-.auth-page .btn-submit {
-  border: none;
-  background: var(--color-primary);
-  color: var(--color-one);
-  border-radius: 8px;
-  padding: 12px;
-  width: 100%;
-  margin: 30px 0 0 0;
-  font-size: 16px;
+.reset-password-page-title {
   font-weight: 600;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  color: var(--color-accent);
+  font-size: 24px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--color-background);
 }
 
-.auth-page .btn-submit:hover {
-  background-color: var(--color-accent);
+.reset-password-page-button {
+  margin: 30px auto 0 auto;
+  min-width: 300px;
 }
-
-.auth-page label {
-  color: var(--color-label);
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.auth-page .input {
-  border-color: var(--color-input-border);
-  border-radius: 8px;
-}
-
-.auth-page .input:focus {
-  border-color: var(--color-accent);
-}
-
-.auth-page .btn-register-call {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.auth-page .btn-register-call:focus {
-  box-shadow: none;
-}
-
-.auth-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+/*# sourceMappingURL=style.css.map */
