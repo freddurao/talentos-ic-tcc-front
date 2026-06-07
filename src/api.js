@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { getWithExpiry } from './utils/object'
 
-export const API_URL = process.env.REACT_APP_API || 'http://localhost:5000'
-export const HOME_URL = process.env.HOME_URL || 'http://localhost:3000/'
+export const API_URL = process.env.REACT_APP_API || 'http://127.0.0.1:5000'
+export const HOME_URL = process.env.HOME_URL || 'http://127.0.0.1:3000/'
 
 const api = axios.create({
   baseURL: API_URL,
