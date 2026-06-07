@@ -19,7 +19,12 @@
 }
 
 .btn-rect.is-blue {
-  background-color: var(--color-accent) !important;
+  background-color: #002147;
+  color: white;
+}
+
+.btn-rect.is-green {
+  background-color: var(--color-green);
 }
 
 .btn-rect.is-white {

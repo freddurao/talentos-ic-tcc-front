@@ -169,7 +169,7 @@ function EditData() {
   }, [profile])
 
   return (
-    <Layout isFinalPage>
+    <Layout>
       <div className="edit-data">
         <div className="card">
           <div className="card-title">

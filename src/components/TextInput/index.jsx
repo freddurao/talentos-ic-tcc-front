@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Text from '../Text'
 import './styles.css'
 
-function TextInput({
+export default function TextInput({
+  id,
   className,
   label,
   subLabel,
   type,
   value,
   setValue,
+  onChange,
   placeholder,
   hasError,
   autoComplete,
@@ -26,34 +27,41 @@ function TextInput({
     setShowPassword(!showPassword)
   }
 
+  const handleInputChange = (e) => {
+    if (setValue) setValue(e.target.value)
+    if (onChange) onChange(e)
+  }
+
   return (
     <div className={`text-input ${className}`}>
-      <Text
-        className={`is-bold ${label ? 'input-label' : ''}`}
-        text={
-          <span>
-            {label}
-            <span className="input-sublabel"> {subLabel}</span>
-          </span>
-        }
-        size={18}
-      />
+      {label && (
+        <label
+          htmlFor={id}
+          className={`is-bold ${label ? 'input-label' : ''}`}
+          style={{ display: 'block', fontSize: '18px', marginBottom: '0.5rem' }}
+        >
+          {label}
+          {subLabel && <span className="input-sublabel"> {subLabel}</span>}
+        </label>
+      )}
       <div className="field-body">
         <div className="field">
           <p className="control">
             {icon && <i className={`input-icon-wrapper ${icon}`} />}
             {multiline ? (
               <textarea
+                id={id}
                 className={`textarea ${hasError ? 'is-danger' : ''} ${
                   icon ? 'with-icon' : ''
                 }`}
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={handleInputChange}
                 autoComplete={autoComplete ? 'on' : 'new-password'}
                 maxLength={maxLength}
               />
             ) : (
               <input
+                id={id}
                 className={`input ${hasError ? 'is-danger' : ''} ${
                   isPassword ? 'input-with-toggle' : ''
                 } ${icon ? 'with-icon' : ''}`}
@@ -61,7 +69,7 @@ function TextInput({
                 value={value}
                 placeholder={placeholder}
                 step="any"
-                onChange={(e) => setValue(e.target.value)}
+                onChange={handleInputChange}
                 autoComplete={autoComplete ? 'on' : 'new-password'}
                 maxLength={maxLength}
               />
@@ -88,32 +96,39 @@ function TextInput({
 }
 
 TextInput.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   label: PropTypes.string,
   subLabel: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.string,
   placeholder: PropTypes.string,
-  setValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func,
+  onChange: PropTypes.func,
   hasError: PropTypes.bool,
   autoComplete: PropTypes.bool,
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 }
 
 TextInput.defaultProps = {
+  id: undefined,
   className: '',
   label: '',
   subLabel: '',
   value: '',
   placeholder: '',
   type: 'text',
+  setValue: undefined,
+  onChange: undefined,
   hasError: false,
   autoComplete: true,
   maxLength: null,
   multiline: false,
-  icon: '',
+  icon: undefined,
 }
-
-export default TextInput

@@ -39,7 +39,7 @@ const ResetPassword = () => {
   }
 
   return (
-    <Layout isFinalPage>
+    <Layout>
       <section className="reset-password-page">
         <h2 className="reset-password-page-title">Cadastrar nova senha</h2>
         <TextInput
