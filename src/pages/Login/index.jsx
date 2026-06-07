@@ -96,6 +96,7 @@ function Login() {
           text="Instituto de Computação da UFBA"
           size={30}
         />
+        <hr />
         <Text
           className="auth-subtitle is-white is-light"
           text="Bem-vindo(a) de volta!"
