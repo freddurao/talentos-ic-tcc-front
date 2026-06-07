@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import Login from '../pages/Login'
 import Register from '../pages/Register'
+import ForgotPassword from '../pages/ForgotPassword'
 import JobList from '../pages/JobList'
 import ProtectedRoute from '../components/Routes/ProtectedRoute'
 import PrivateRoute from '../components/Routes/PrivateRoute'
@@ -33,6 +34,7 @@ function AppRoutes() {
         <Route path="/vagas/:id" exact element={<JobDetails />} />
         <Route path="/verperfil/:id" exact element={<ViewProfile />} />
         <Route path="/resetarsenha/:token" exact element={<ResetPassword />} />
+        <Route path="/recuperarsenha" exact element={<ForgotPassword />} />
 
         <Route path="/perfis" exact element={<ProfilesList />} />
 
