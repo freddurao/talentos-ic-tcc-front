@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Text from '../Text'
 import './styles.css'
@@ -15,7 +15,17 @@ function TextInput({
   autoComplete,
   maxLength,
   multiline,
+  icon,
 }) {
+  const [showPassword, setShowPassword] = useState(false)
+
+  const isPassword = type === 'password'
+  const inputType = isPassword && showPassword ? 'text' : type
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <div className={`text-input ${className}`}>
       <Text
@@ -31,9 +41,12 @@ function TextInput({
       <div className="field-body">
         <div className="field">
           <p className="control">
+            {icon && <i className={`input-icon-wrapper ${icon}`} />}
             {multiline ? (
               <textarea
-                className={`textarea ${hasError ? 'is-danger' : ''}`}
+                className={`textarea ${hasError ? 'is-danger' : ''} ${
+                  icon ? 'with-icon' : ''
+                }`}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 autoComplete={autoComplete ? 'on' : 'new-password'}
@@ -41,8 +54,10 @@ function TextInput({
               />
             ) : (
               <input
-                className={`input ${hasError ? 'is-danger' : ''}`}
-                type={type}
+                className={`input ${hasError ? 'is-danger' : ''} ${
+                  isPassword ? 'input-with-toggle' : ''
+                } ${icon ? 'with-icon' : ''}`}
+                type={inputType}
                 value={value}
                 placeholder={placeholder}
                 step="any"
@@ -53,6 +68,20 @@ function TextInput({
             )}
           </p>
         </div>
+        {isPassword && (
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
+          >
+            <i
+              className={`fa-regular ${
+                showPassword ? 'fa-eye-slash' : 'fa-eye'
+              }`}
+            />
+          </button>
+        )}
       </div>
     </div>
   )
@@ -70,6 +99,7 @@ TextInput.propTypes = {
   autoComplete: PropTypes.bool,
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
+  icon: PropTypes.string,
 }
 
 TextInput.defaultProps = {
@@ -83,6 +113,7 @@ TextInput.defaultProps = {
   autoComplete: true,
   maxLength: null,
   multiline: false,
+  icon: '',
 }
 
 export default TextInput

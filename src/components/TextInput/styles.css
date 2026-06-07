@@ -1,22 +1,82 @@
 .text-input {
   margin-top: 20px;
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 .input-label {
   margin-bottom: 10px;
 }
 
+.text-input .field-body {
+  position: relative;
+  width: 100%;
+  display: block; /* Garante que não haja comportamento flex inesperado */
+}
+
 .text-input .field {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  width: 100%;
+  margin: 0;
+}
+
+.text-input .control {
+  width: 100%;
+  position: relative;
+}
+
+.text-input .input, 
+.text-input .textarea {
+  width: 100%;
+  display: block;
 }
 
 .input-sublabel {
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7a7a7a;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  z-index: 10;
+  height: 38px; /* Altura aproximada do input para garantir centralização */
+}
+
+.password-toggle i {
+  font-size: 18px;
+}
+
+.text-input .input-with-toggle {
+  padding-right: 40px !important;
+}
+
+.input-icon-wrapper {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7a7a7a;
+  font-size: 18px;
+  z-index: 5;
+  pointer-events: none;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.text-input .input.with-icon {
+  padding-left: 40px !important;
+}
+
+.text-input .textarea.with-icon {
+  padding-left: 40px !important;
 }

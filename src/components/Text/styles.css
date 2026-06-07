@@ -18,6 +18,10 @@
   color: var(--color-accent);
 }
 
+.text.is-primary {
+  color: var(--color-primary);
+}
+
 .text.is-white {
   color: var(--color-one);
 }
