@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
+import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import JobList from '../pages/JobList'
@@ -29,7 +30,8 @@ function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" exact element={<JobList />} />
+        <Route path="/" exact element={<Home />} />
+        <Route path="/vagas" exact element={<JobList />} />
         <Route path="/vagas/:id" exact element={<JobDetails />} />
         <Route path="/verperfil/:id" exact element={<ViewProfile />} />
         <Route path="/resetarsenha/:token" exact element={<ResetPassword />} />

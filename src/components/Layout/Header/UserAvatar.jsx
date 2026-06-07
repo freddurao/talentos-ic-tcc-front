@@ -62,7 +62,10 @@ function UserAvatar() {
               navigate('/gerenciarsistema')
             )}
           <hr className="dropdown-divider" />
-          {dropdownItem('Sair do Sistema', faSignOutAlt, logout)}
+          {dropdownItem('Sair do Sistema', faSignOutAlt, () => {
+            logout()
+            navigate('/')
+          })}
         </div>
       </div>
     </div>
