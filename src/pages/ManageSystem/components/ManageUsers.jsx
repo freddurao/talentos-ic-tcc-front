@@ -94,6 +94,14 @@ function ManageUsers() {
       <div className={`modal ${editModal.opened ? 'is-active' : ''}`}>
         <div
           className="modal-background"
+          role="button"
+          tabIndex={0}
+          aria-label="Fechar modal"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setEditModal({ opened: false, user: null })
+            }
+          }}
           onClick={() => setEditModal({ opened: false, user: null })}
         />
         <div className="modal-card" style={{ width: '600px', maxWidth: '95%' }}>

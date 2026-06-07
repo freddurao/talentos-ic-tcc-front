@@ -12,7 +12,13 @@ api.interceptors.request.use(
   (config) => {
     const token = getWithExpiry('@vagas/token')
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      return {
+        ...config,
+        headers: {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        },
+      }
     }
     return config
   },
