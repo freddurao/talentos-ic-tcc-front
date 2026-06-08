@@ -1,15 +1,18 @@
 :root {
   --font-default: 'Lato', sans-serif;
   --color-border: #dfdfdf;
-  --color-background: #eee;
+  --color-background: #F8F9FF;
   --color-text: #444;
+  --color-label: #0B1C30;
   --color-one: #fff;
-  --color-two: #13335f;
-  --color-accent: #13335f;
+  --color-two: #001E42;
+  --color-accent: #0058BE;
+  --color-primary: #001E42;
+  --color-input-border: #E2E8F0;
   --color-green: #2E8B38;
   --color-red: #E03A3A;
-  --shadow-default: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
-  --border-radius: 5px;
+  --shadow-default: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --border-radius: 12px;
   --color-yellow: #FBAF3D;
 }
 
@@ -33,9 +36,10 @@ code {
 }
 
 .card {
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   padding: 10px;
-  filter: drop-shadow(-1px -1px 6px rgba(0, 0, 0, 0.1));
+  background: var(--color-one);
+  box-shadow: var(--shadow-default);
   display: flex;
   flex-direction: column;
 }

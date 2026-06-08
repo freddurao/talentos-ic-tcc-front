@@ -28,7 +28,12 @@
 }
 
 .btn-rect.is-white {
-  background-color: var(--color-one);
+  background-color: var(--color-one) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.btn-rect.is-white .text {
+  color: var(--color-text) !important;
 }
 
 .btn-rect.is-red {

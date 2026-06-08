@@ -37,7 +37,7 @@ function Header({ headerChildren }) {
 
           <nav className="header-nav">
             <NavLink
-              to="/"
+              to="/vagas"
               className={({ isActive }) =>
                 `nav-item ${isActive ? 'is-active' : ''}`
               }

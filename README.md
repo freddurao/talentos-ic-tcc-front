@@ -111,7 +111,7 @@ $ npm test
 
 | Name          | Description     | Default               |
 | -             | -               | -                     |
-| REACT_APP_API | URL of the API  | http://localhost:5000 |
+| REACT_APP_API | URL of the API  | http://127.0.0.1:5000 |
 
 ---
 

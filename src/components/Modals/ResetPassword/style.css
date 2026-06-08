@@ -1,35 +1,36 @@
-.modal-reset-password {
-  left: 0;
-  padding: 5%;
-}
-
 .modal-reset-password .modal-card {
   width: 100%;
-  max-width: 1100px;
+  max-width: 450px;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-reset-password .modal-card-title {
-  color: var(--color-accent);
-  font-weight: 600;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 20px;
 }
 
-.modal-reset-password .modal-card-title, .modal-reset-password .modal-card-body {
+.modal-reset-password .modal-card-body {
   text-align: center;
+  padding: 20px;
 }
 
 .modal-reset-password .modal-card-foot {
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
+  border: none;
+  padding: 20px;
 }
 
 .modal-reset-password-email-receiver {
-  max-width: 600px;
-  margin: 40px auto 0 auto;
+  margin: 20px auto 0 auto;
 }
 
 .modal-reset-password-description {
-  max-width: 350px;
-  margin: 0 auto;
+  color: #666;
+  font-size: 14px;
 }
 /*# sourceMappingURL=style.css.map */

@@ -1,11 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './styles.css'
 
-function TextInput({
+export default function TextInput({
   id,
-  name,
   className,
   label,
   subLabel,
@@ -20,21 +18,25 @@ function TextInput({
   multiline,
   icon,
 }) {
-  const handleChange = (e) => {
-    if (onChange) {
-      onChange(e)
-    } else if (setValue) {
-      setValue(e.target.value)
-    }
+  const [showPassword, setShowPassword] = useState(false)
+
+  const isPassword = type === 'password'
+  const inputType = isPassword && showPassword ? 'text' : type
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
-  const inputId = id || name
+  const handleInputChange = (e) => {
+    if (setValue) setValue(e.target.value)
+    if (onChange) onChange(e)
+  }
 
   return (
     <div className={`text-input ${className}`}>
       {label && (
         <label
-          htmlFor={inputId}
+          htmlFor={id}
           className={`is-bold ${label ? 'input-label' : ''}`}
           style={{ display: 'block', fontSize: '18px', marginBottom: '0.5rem' }}
         >
@@ -44,40 +46,50 @@ function TextInput({
       )}
       <div className="field-body">
         <div className="field">
-          <p className={`control ${icon ? 'has-icons-left' : ''}`}>
+          <p className="control">
+            {icon && <i className={`input-icon-wrapper ${icon}`} />}
             {multiline ? (
               <textarea
-                id={inputId}
-                name={name}
-                className={`textarea ${hasError ? 'is-danger' : ''}`}
+                id={id}
+                className={`textarea ${hasError ? 'is-danger' : ''} ${
+                  icon ? 'with-icon' : ''
+                }`}
                 value={value}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 autoComplete={autoComplete ? 'on' : 'new-password'}
                 maxLength={maxLength}
               />
             ) : (
-              <>
-                <input
-                  id={inputId}
-                  name={name}
-                  className={`input ${hasError ? 'is-danger' : ''}`}
-                  type={type}
-                  value={value}
-                  placeholder={placeholder}
-                  step="any"
-                  onChange={handleChange}
-                  autoComplete={autoComplete ? 'on' : 'new-password'}
-                  maxLength={maxLength}
-                />
-                {icon && (
-                  <span className="icon is-small is-left">
-                    <FontAwesomeIcon icon={icon} />
-                  </span>
-                )}
-              </>
+              <input
+                id={id}
+                className={`input ${hasError ? 'is-danger' : ''} ${
+                  isPassword ? 'input-with-toggle' : ''
+                } ${icon ? 'with-icon' : ''}`}
+                type={inputType}
+                value={value}
+                placeholder={placeholder}
+                step="any"
+                onChange={handleInputChange}
+                autoComplete={autoComplete ? 'on' : 'new-password'}
+                maxLength={maxLength}
+              />
             )}
           </p>
         </div>
+        {isPassword && (
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? 'Esconder senha' : 'Mostrar senha'}
+          >
+            <i
+              className={`fa-regular ${
+                showPassword ? 'fa-eye-slash' : 'fa-eye'
+              }`}
+            />
+          </button>
+        )}
       </div>
     </div>
   )
@@ -85,7 +97,6 @@ function TextInput({
 
 TextInput.propTypes = {
   id: PropTypes.string,
-  name: PropTypes.string,
   className: PropTypes.string,
   label: PropTypes.string,
   subLabel: PropTypes.string,
@@ -98,12 +109,15 @@ TextInput.propTypes = {
   autoComplete: PropTypes.bool,
   maxLength: PropTypes.number,
   multiline: PropTypes.bool,
-  icon: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 }
 
 TextInput.defaultProps = {
   id: undefined,
-  name: undefined,
   className: '',
   label: '',
   subLabel: '',
@@ -118,5 +132,3 @@ TextInput.defaultProps = {
   multiline: false,
   icon: undefined,
 }
-
-export default TextInput

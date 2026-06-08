@@ -21,10 +21,7 @@ import Text from '../../../components/Text'
 import TextInput from '../../../components/TextInput'
 import { useGetJobs } from '../../../hooks/jobs'
 import { localDate, numberToReais } from '../../../utils/conversions'
-import {
-  jobTypeLabel,
-  scholarityLabel,
-} from '../../../utils/constants/project'
+import { jobTypeLabel, scholarityLabel } from '../../../utils/constants/project'
 
 function MonitorJobs() {
   const navigate = useNavigate()
@@ -62,6 +59,14 @@ function MonitorJobs() {
       <div className={`modal ${viewModal.opened ? 'is-active' : ''}`}>
         <div
           className="modal-background"
+          role="button"
+          tabIndex={0}
+          aria-label="Fechar modal"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setViewModal({ opened: false, job: null })
+            }
+          }}
           onClick={() => setViewModal({ opened: false, job: null })}
         />
         <div className="modal-card" style={{ width: '700px', maxWidth: '90%' }}>
@@ -83,9 +88,7 @@ function MonitorJobs() {
                     size={24}
                     className="is-bold text-blue-strong mb-2"
                   />
-                  <span className="status-badge status-active">
-                    Vaga Ativa
-                  </span>
+                  <span className="status-badge status-active">Vaga Ativa</span>
                 </div>
 
                 <div className="columns is-multiline">
