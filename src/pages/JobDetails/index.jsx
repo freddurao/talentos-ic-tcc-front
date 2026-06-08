@@ -36,7 +36,7 @@ function JobDetails() {
 
   const isJobApplied = useMemo(
     () =>
-      appliedJobs.filter(({ jobId }) => jobId === parseInt(params.id, 10))
+      appliedJobs.filter(({ jobId }) => jobId === params.id)
         .length > 0,
     [appliedJobs, params]
   )
@@ -47,7 +47,7 @@ function JobDetails() {
   )
 
   const onApplyToJob = async () => {
-    await applyToJob(parseInt(params.id, 10), parseInt(userId, 10)).then(
+    await applyToJob(params.id, userId).then(
       ({ error: hasError, emptyProfile }) => {
         if (!hasError) navigate('/minhasvagas')
         else {
@@ -95,7 +95,7 @@ function JobDetails() {
       />
       <div className="job-details">
         <div className="card detail-card">
-          {job && user ? (
+          {job ? (
             <>
               {console.log(profiles)}
               <div className="detail-top-container">
@@ -153,13 +153,13 @@ function JobDetails() {
                   <Text className="is-blue is-bold" text="Contato" size={20} />
                 </div>
                 <div className="bottom-details">
-                  {renderDetailItem(
+                  {user && renderDetailItem(
                     'Nome do responsável pela vaga',
                     user.name,
                     'bottom-detail-item',
                     18
                   )}
-                  {renderDetailItem('E-mail', user.email, '', 18)}
+                  {user && renderDetailItem('E-mail', user.email, '', 18)}
                   <div className="btn-apply-container">
                     <ButtonRectangle
                       className="is-green"
