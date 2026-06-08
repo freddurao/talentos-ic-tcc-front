@@ -48,11 +48,16 @@ function JobDetails() {
 
   const onApplyToJob = async () => {
     await applyToJob(params.id, userId).then(
-      ({ error: hasError, emptyProfile }) => {
+      (res) => {
+        const hasError = res.error || res.status === 'fail';
+        const isEmptyProfile = res.emptyProfile || (res.error && res.error.emptyProfile);
+        
         if (!hasError) navigate('/minhasvagas')
         else {
           setModalOpened(false)
-          if (emptyProfile) setErrorModalOpened(true)
+          if (isEmptyProfile) {
+            setErrorModalOpened(true)
+          }
         }
       }
     )
@@ -86,18 +91,59 @@ function JobDetails() {
         onCancel={() => setModalOpened(false)}
         opened={modalOpened}
       />
-      <ConfirmModal
-        title="Erro na aplicação de vaga"
-        description="Para aplicar para qualquer vaga, é necessário ter um perfil. Deseja ir para a página de criar perfil?"
-        onConfirm={() => navigate('/editardados')}
-        onCancel={() => setErrorModalOpened(false)}
-        opened={errorModalOpened}
-      />
+      {/* Modal de Perfil Incompleto (Estilo Admin) */}
+      <div className={`modal ${errorModalOpened ? 'is-active' : ''}`}>
+        <div 
+          className="modal-background" 
+          onClick={() => setErrorModalOpened(false)} 
+        />
+        <div className="modal-card" style={{ width: '500px', maxWidth: '90%' }}>
+          <header className="modal-card-head" style={{ backgroundColor: '#203e81' }}>
+            <p className="modal-card-title has-text-white">Perfil Incompleto</p>
+            <button
+              className="delete"
+              aria-label="close"
+              onClick={() => setErrorModalOpened(false)}
+            />
+          </header>
+          <section className="modal-card-body p-5">
+            <div className="has-text-centered mb-4">
+               <Text 
+                className="is-bold is-blue" 
+                text="Quase lá!" 
+                size={22} 
+              />
+            </div>
+            <Text 
+              text="Para se candidatar a uma vaga, você precisa ter um perfil cadastrado no sistema. Isso ajuda os recrutadores a conhecerem melhor suas habilidades." 
+              size={16} 
+            />
+            <div className="mt-4">
+              <Text 
+                className="is-bold" 
+                text="Deseja completar seu perfil agora?" 
+                size={16} 
+              />
+            </div>
+          </section>
+          <footer className="modal-card-foot is-justify-content-flex-end">
+            <ButtonRectangle
+              className="is-blue"
+              label="Depois"
+              onClick={() => setErrorModalOpened(false)}
+            />
+            <ButtonRectangle
+              className="is-green"
+              label="Completar Perfil"
+              onClick={() => navigate('/editardados')}
+            />
+          </footer>
+        </div>
+      </div>
       <div className="job-details">
         <div className="card detail-card">
           {job ? (
             <>
-              {console.log(profiles)}
               <div className="detail-top-container">
                 <div>
                   <Text

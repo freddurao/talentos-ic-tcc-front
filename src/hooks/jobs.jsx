@@ -128,19 +128,32 @@ export const useJobRoutes = () => {
   }
 
   const applyToJob = async (jobId, userId) => {
-    const response = await api.post('/vagas/aplicacao', {
-      jobId,
-      userId,
-    })
+    try {
+      const response = await api.post('/vagas/aplicacao', {
+        jobId,
+        userId,
+      })
 
-    if (response.data.message) {
-      if (response.data.error) toast.error(response.data.message)
-      else toast.success(response.data.message)
+      if (response.data.message) {
+        if (response.data.error) toast.error(response.data.message)
+        else toast.success(response.data.message)
+      }
+
+      handleNotAuthorized(response, navigate)
+
+      return response.data
+    } catch (err) {
+      if (err.response && err.response.data) {
+        const { data } = err.response
+        if (data.emptyProfile || (data.error && data.error.emptyProfile)) {
+          return { error: true, emptyProfile: true }
+        }
+        if (data.message) toast.error(data.message)
+        return { ...data, error: true }
+      }
+      toast.error('Ocorreu um erro ao se candidatar.')
+      return { error: true }
     }
-
-    handleNotAuthorized(response, navigate)
-
-    return response.data
   }
 
   const feedbackJobs = async (jobId, status) => {
