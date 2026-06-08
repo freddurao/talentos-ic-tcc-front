@@ -87,6 +87,11 @@ function ProfilesList() {
     setFilters({ filter: sanitizeStringToSearch(profileFilter) })
   }
 
+  const createJob = () => {
+    if (isAuthenticated) navigate('/formulariovaga/criar')
+    else navigate('/login?criarvaga=1')
+  }
+
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false
@@ -95,6 +100,22 @@ function ProfilesList() {
 
   return (
     <Layout
+      superHeaderChildren={[
+        <ButtonRectangle
+          key="btn-add-job"
+          label="Cadastrar Vaga"
+          onClick={createJob}
+          className="is-blue header-button"
+        />,
+        isAuthenticated ? (
+          <ButtonRectangle
+            key="btn-jobs"
+            label="Minhas Vagas"
+            className="is-blue header-button"
+            onClick={() => navigate('/minhasvagas')}
+          />
+        ) : null,
+      ]}
       headerLeftChildren={
         <SearchBox
           className="search-box"
