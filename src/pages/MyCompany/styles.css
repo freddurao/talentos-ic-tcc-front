@@ -1,0 +1,82 @@
+.my-company-page-container {
+  padding: 30px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.max-width-600 {
+  max-width: 600px;
+}
+
+.company-info-header {
+  border: 1px solid #eef2f6;
+}
+
+.bg-light {
+  background-color: #f8fafc;
+}
+
+.company-modal-description {
+  line-height: 1.6;
+  color: #475569;
+  white-space: pre-line;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.admin-table th, .admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.admin-table th {
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: #f8fafc;
+}
+
+.admin-table tr:hover {
+  background-color: #fcfcfc;
+}
+
+.buttons.are-small .button {
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.textarea {
+  border-radius: 12px;
+  border-color: var(--color-input-border);
+  font-family: inherit;
+  padding: 10px;
+  resize: vertical;
+}
+
+.textarea:focus {
+  border-color: var(--color-accent) !important;
+  outline: none;
+}
+
+/* Danger Zone styles */
+.border-danger-zone {
+  border: 1px dashed #f87171 !important;
+  background-color: #fffbfa !important;
+}
+
+.ml-auto-tablet {
+  margin-left: 0;
+  margin-top: 15px;
+}
+
+@media (min-width: 769px) {
+  .ml-auto-tablet {
+    margin-left: auto !important;
+    margin-top: 0 !important;
+  }
+}

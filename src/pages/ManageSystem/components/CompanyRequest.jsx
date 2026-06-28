@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faSave,
   faBuilding,
-  faEnvelope,
   faIdCard,
   faGlobe,
 } from '@fortawesome/free-solid-svg-icons'
@@ -16,7 +15,6 @@ function CompanyRequest() {
   const [formData, setFormData] = useState({
     name: '',
     cnpj: '',
-    email: '',
     website: '',
     description: '',
   })
@@ -34,7 +32,6 @@ function CompanyRequest() {
       setFormData({
         name: '',
         cnpj: '',
-        email: '',
         website: '',
         description: '',
       })
@@ -73,33 +70,16 @@ function CompanyRequest() {
           />
         </div>
 
-        <div className="columns">
-          <div className="column">
-            <div className="field mb-5">
-              <TextInput
-                label="CNPJ"
-                name="cnpj"
-                id="company-cnpj"
-                placeholder="00.000.000/0000-00"
-                value={formData.cnpj}
-                onChange={handleChange}
-                icon={faIdCard}
-              />
-            </div>
-          </div>
-          <div className="column">
-            <div className="field mb-5">
-              <TextInput
-                label="E-mail Corporativo"
-                name="email"
-                id="company-email"
-                placeholder="contato@empresa.com"
-                value={formData.email}
-                onChange={handleChange}
-                icon={faEnvelope}
-              />
-            </div>
-          </div>
+        <div className="field mb-5">
+          <TextInput
+            label="CNPJ"
+            name="cnpj"
+            id="company-cnpj"
+            placeholder="00.000.000/0000-00"
+            value={formData.cnpj}
+            onChange={handleChange}
+            icon={faIdCard}
+          />
         </div>
 
         <div className="field mb-5">

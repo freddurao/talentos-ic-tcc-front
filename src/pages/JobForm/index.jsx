@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
 import { DateBox, SelectBox } from '../../components/FormElements'
 import Layout from '../../components/Layout'
 import ConfirmModal from '../../components/Modals/ConfirmModal'
@@ -152,117 +151,151 @@ function JobForm() {
       <div className="card-title">
         <Text
           className="is-bold is-blue"
-          text={isCreationForm ? 'Cadastrar vaga' : 'Editar vaga'}
+          text={isCreationForm ? 'Cadastrar Nova Vaga' : 'Editar Vaga'}
           size={24}
         />
       </div>
       <form autoComplete="off" onSubmit={onSave}>
-        <TextInput
-          label="Título"
-          type="text"
-          value={title}
-          setValue={setTitle}
-          autoComplete={false}
-          maxLength={255}
-          hasError={hasError && isTitleInvalid()}
-        />
-        <TextInput
-          label="Descrição"
-          multiline
-          value={description}
-          setValue={setDescription}
-          hasError={hasError && isDescriptionInvalid()}
-        />
-        <div className="form-horizontal form-margin-top">
-          <DateBox
-            className="margin-input"
-            label="Data de Início do Trabalho"
-            labelLarge
-            value={startingDate}
-            onChange={(e) => setStartingDate(e.target.value)}
-            hasError={hasError && isStartingDateInvalid()}
-          />
-          <DateBox
-            label="Data de Fim das Candidaturas"
-            labelLarge
-            value={endingDate}
-            onChange={(e) => setEndingDate(e.target.value)}
-            hasError={hasError && isEndingDateInvalid()}
-          />
+        <div className="columns">
+          {/* Coluna Esquerda (7/12) - Textos Principais */}
+          <div className="column is-7">
+            <div className="mb-2">
+              <TextInput
+                label="Título da Vaga"
+                type="text"
+                value={title}
+                setValue={setTitle}
+                autoComplete={false}
+                maxLength={255}
+                hasError={hasError && isTitleInvalid()}
+                placeholder="Ex: Desenvolvedor Front-end React"
+              />
+            </div>
+            <div>
+              <TextInput
+                className="textarea-tall"
+                label="Descrição Detalhada"
+                multiline
+                value={description}
+                setValue={setDescription}
+                hasError={hasError && isDescriptionInvalid()}
+                placeholder="Descreva as responsabilidades, requisitos e detalhes da vaga..."
+              />
+            </div>
+          </div>
+
+          {/* Coluna Direita (5/12) - Metadados e Parâmetros */}
+          <div className="column is-5">
+            <div className="columns is-multiline">
+              <div className="column is-12 mb-2">
+                <TextInput
+                  label="Localidade (Cidade/Estado ou Remoto)"
+                  value={site}
+                  setValue={setSite}
+                  type="text"
+                  autoComplete={false}
+                  maxLength={255}
+                  hasError={hasError && isSiteInvalid()}
+                  placeholder="Ex: Rio de Janeiro - RJ ou Remoto"
+                />
+              </div>
+
+              <div className="column is-6 mb-2">
+                <SelectBox
+                  label="Regime de Trabalho"
+                  labelLarge
+                  initialOption="Selecionar Regime"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  options={jobTypes}
+                  hasError={hasError && isTypeInvalid()}
+                />
+              </div>
+
+              <div className="column is-6 mb-2">
+                <SelectBox
+                  label="Escolaridade Mínima"
+                  labelLarge
+                  value={scholarity}
+                  onChange={(e) => setScholarity(e.target.value)}
+                  initialOption="Selecionar Escolaridade"
+                  options={jobScholarities}
+                  hasError={hasError && isScholarityInvalid()}
+                />
+              </div>
+
+              <div className="column is-6 mb-2">
+                <TextInput
+                  label="Carga Horária (h)"
+                  type="number"
+                  value={`${workload}`}
+                  setValue={setWorkload}
+                  autoComplete={false}
+                  hasError={hasError && isWorkloadInvalid()}
+                  placeholder="Ex: 40"
+                />
+              </div>
+
+              <div className="column is-6 mb-2">
+                <TextInput
+                  label="Salário / Bolsa (R$)"
+                  type="number"
+                  value={`${salary}`}
+                  setValue={(value) => setSalary(value)}
+                  placeholder={`${DEFAULT_SALARY}`}
+                  autoComplete={false}
+                  maxLength={255}
+                />
+              </div>
+
+              <div className="column is-12 mb-2">
+                <DateBox
+                  label="Data de Início do Trabalho"
+                  labelLarge
+                  value={startingDate}
+                  onChange={(e) => setStartingDate(e.target.value)}
+                  hasError={hasError && isStartingDateInvalid()}
+                />
+              </div>
+
+              <div className="column is-12 mb-2">
+                <DateBox
+                  label="Data Limite para Candidatura"
+                  labelLarge
+                  value={endingDate}
+                  onChange={(e) => setEndingDate(e.target.value)}
+                  hasError={hasError && isEndingDateInvalid()}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="form-horizontal">
-          <TextInput
-            className="margin-input"
-            label="Localidade"
-            value={site}
-            setValue={setSite}
-            type="text"
-            autoComplete={false}
-            maxLength={255}
-            hasError={hasError && isSiteInvalid()}
-          />
-          <SelectBox
-            className="form-margin-top"
-            label="Escolaridade"
-            labelLarge
-            value={scholarity}
-            onChange={(e) => setScholarity(e.target.value)}
-            initialOption="Selecionar Escolaridade"
-            options={jobScholarities}
-            hasError={hasError && isScholarityInvalid()}
-          />
-        </div>
-        <div className="form-horizontal">
-          <SelectBox
-            className="form-margin-top margin-input"
-            label="Tipo da Vaga"
-            labelLarge
-            initialOption="Selecionar Tipo"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            options={jobTypes}
-            hasError={hasError && isTypeInvalid()}
-          />
-          <TextInput
-            className="margin-input"
-            label="Carga Horária"
-            type="number"
-            value={`${workload}`}
-            setValue={setWorkload}
-            autoComplete={false}
-            hasError={hasError && isWorkloadInvalid()}
-          />
-          <TextInput
-            label="Salário/Bolsa/Vencimento"
-            type="number"
-            value={`${salary}`}
-            setValue={(value) => setSalary(value)}
-            placeholder={`${DEFAULT_SALARY}`}
-            autoComplete={false}
-            maxLength={255}
-          />
-        </div>
-        <div className="form-horizontal">
-          {isCreationForm ? (
-            <ButtonRectangle
-              className="btn-save is-blue"
-              label="Criar Vaga"
-              isSubmit
-            />
-          ) : (
-            <>
-              <ButtonRectangle
-                className="btn-save is-red margin-input"
-                label="Deletar Vaga"
+
+        {/* Botões de Ação */}
+        <div className="field is-grouped is-grouped-right mt-4 pt-3 border-top">
+          {!isCreationForm && (
+            <p className="control">
+              <button
+                type="button"
+                className="button is-danger is-rounded font-weight-bold px-5"
+                style={{ height: '45px' }}
                 onClick={() => setDeleteModalOpened(true)}
-              />
-              <ButtonRectangle
-                className="btn-save is-green"
-                label="Salvar Vaga"
-                isSubmit
-              />
-            </>
+              >
+                Excluir Vaga
+              </button>
+            </p>
           )}
+          <p className="control">
+            <button
+              type="submit"
+              className={`button ${
+                isCreationForm ? 'bg-blue' : 'is-success'
+              } is-rounded font-weight-bold px-5`}
+              style={{ height: '45px', color: '#fff' }}
+            >
+              {isCreationForm ? 'Criar Vaga' : 'Salvar Alterações'}
+            </button>
+          </p>
         </div>
       </form>
     </>

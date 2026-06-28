@@ -12,6 +12,38 @@ function Header({ headerChildren }) {
   const navigate = useNavigate()
   const { isAuthenticated, user } = useAuth()
 
+  const [dismissedRequests, setDismissedRequests] = React.useState(() => {
+    try {
+      const saved = localStorage.getItem('@vagas/dismissed_requests')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  React.useEffect(() => {
+    const handleUpdate = () => {
+      try {
+        const saved = localStorage.getItem('@vagas/dismissed_requests')
+        setDismissedRequests(saved ? JSON.parse(saved) : [])
+      } catch {
+        setDismissedRequests([])
+      }
+    }
+    window.addEventListener('dismiss_request_update', handleUpdate)
+    return () =>
+      window.removeEventListener('dismiss_request_update', handleUpdate)
+  }, [])
+
+  const hasRequests = React.useMemo(() => {
+    if (!user || !user.companyRequests) return false
+    return user.companyRequests.some(
+      (r) =>
+        r.status === 'PENDING' ||
+        (r.status === 'REJECTED' && !dismissedRequests.includes(r.id))
+    )
+  }, [user, dismissedRequests])
+
   const navigateToLogin = () => navigate('/login')
 
   return (
@@ -53,6 +85,37 @@ function Header({ headerChildren }) {
             >
               Perfis
             </NavLink>
+            <NavLink
+              to="/empresas"
+              className={({ isActive }) =>
+                `nav-item ${isActive ? 'is-active' : ''}`
+              }
+            >
+              Empresas
+            </NavLink>
+            {isAuthenticated && user?.role !== 'ADMIN' && user?.companyId && (
+              <NavLink
+                to="/minha-empresa"
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? 'is-active' : ''}`
+                }
+              >
+                Minha Empresa
+              </NavLink>
+            )}
+            {isAuthenticated &&
+              user?.role !== 'ADMIN' &&
+              !user?.companyId &&
+              hasRequests && (
+                <NavLink
+                  to="/minha-empresa"
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? 'is-active' : ''}`
+                  }
+                >
+                  Minha Solicitação
+                </NavLink>
+              )}
             {user?.role === 'ADMIN' && (
               <NavLink
                 to="/gerenciarsistema"

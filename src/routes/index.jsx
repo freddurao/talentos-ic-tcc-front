@@ -16,6 +16,9 @@ import ProfilesList from '../pages/ProfilesList'
 import MyJob from '../pages/MyJobs'
 import ManageSystem from '../pages/ManageSystem'
 import ResetPassword from '../pages/ResetPassword'
+import CompaniesList from '../pages/CompaniesList'
+import MyCompany from '../pages/MyCompany'
+import RegisterCompany from '../pages/RegisterCompany'
 
 // Component to define the frontend routes and the privacy of each one
 function AppRoutes() {
@@ -37,6 +40,7 @@ function AppRoutes() {
         <Route path="/resetarsenha/:token" exact element={<ResetPassword />} />
 
         <Route path="/perfis" exact element={<ProfilesList />} />
+        <Route path="/empresas" exact element={<CompaniesList />} />
 
         <Route exact path="/login" element={<ProtectedRoute />}>
           <Route exact path="/login" element={<Login />} />
@@ -68,6 +72,18 @@ function AppRoutes() {
 
         <Route exact path="/gerenciarsistema" element={<PrivateRoute />}>
           <Route exact path="/gerenciarsistema" element={<ManageSystem />} />
+        </Route>
+
+        <Route exact path="/minha-empresa" element={<PrivateRoute />}>
+          <Route exact path="/minha-empresa" element={<MyCompany />} />
+        </Route>
+
+        <Route exact path="/cadastrar-empresa" element={<PrivateRoute />}>
+          <Route
+            exact
+            path="/cadastrar-empresa"
+            element={<RegisterCompany />}
+          />
         </Route>
       </Routes>
     </Router>

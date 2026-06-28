@@ -199,3 +199,44 @@
 .return-button-wrapper .lnr-arrow-right {
   color: #ffffff !important;
 }
+
+/* Responsive Header Styles */
+@media (max-width: 1024px) {
+  .logo-text {
+    display: none !important;
+  }
+  .user-text {
+    display: none !important;
+  }
+  .header-nav {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    gap: 20px !important;
+    margin-left: 24px;
+    z-index: 2;
+  }
+  .nav-item {
+    font-size: 15px !important;
+  }
+  .header-container {
+    padding: 0 20px !important;
+  }
+  .header-custom-content {
+    margin-right: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-nav {
+    gap: 12px !important;
+    margin-left: 12px !important;
+  }
+  .nav-item {
+    font-size: 13px !important;
+  }
+  .header-container {
+    padding: 0 10px !important;
+  }
+}

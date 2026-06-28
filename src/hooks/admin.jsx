@@ -1,9 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../api'
 import { handleNotAuthorized } from '../utils/requests'
+import { isCNPJValid } from '../utils/validations'
 
 export const useGetUsers = () => {
   const navigate = useNavigate()
@@ -84,6 +84,10 @@ export const useAdminRoutes = () => {
   }
 
   const requestCompany = async (data) => {
+    if (!isCNPJValid(data.cnpj)) {
+      toast.error('CNPJ inválido.')
+      return false
+    }
     try {
       const response = await api.post(`/empresas/solicitacao`, data)
       if (response.data.error) {

@@ -1,18 +1,20 @@
-/* eslint-disable react/style-prop-object */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import './style.css'
 import LinesEllipsis from 'react-lines-ellipsis'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faCheckCircle,
+} from '@fortawesome/free-solid-svg-icons'
 import { Button } from '../FormElements'
 import { localDate } from '../../utils/conversions'
 import { HOME_URL } from '../../api'
 import { useJobRoutes, getFeedbackStatus } from '../../hooks/jobs'
 
 function JobRecommendationCard({ data }) {
-  const { title, description, site, endingDate, id } = data
+  const { title, description, site, endingDate, id, companyId } = data
   const { feedbackJobs } = useJobRoutes()
   const likeFeedback = () => {
     feedbackJobs(id, 'like')
@@ -92,7 +94,21 @@ function JobRecommendationCard({ data }) {
       <div className="job-top-container">
         <div className="description-container">
           <h3>
-            {title}
+            <div className="is-flex is-align-items-center is-justify-content-between">
+              <span>{title}</span>
+              {companyId && (
+                <span
+                  className="tag is-success is-light font-weight-bold ml-2 py-2 px-3 border-radius-8"
+                  style={{ fontSize: '12px' }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className="mr-1 text-success"
+                  />{' '}
+                  Oficial
+                </span>
+              )}
+            </div>
             <sub>{site}</sub>
           </h3>
           <LinesEllipsis
