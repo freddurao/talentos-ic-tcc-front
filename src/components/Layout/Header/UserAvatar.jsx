@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,6 +7,7 @@ import {
   faSignOutAlt,
   faCog,
   faUserCircle,
+  faBuilding,
 } from '@fortawesome/free-solid-svg-icons'
 import useAuth from '../../../hooks/useAuth'
 import Text from '../../Text'
@@ -13,7 +15,7 @@ import './styles.css'
 
 function UserAvatar() {
   const navigate = useNavigate()
-  const { logout, userId, user } = useAuth()
+  const { logout, userId, user, isAuthenticated } = useAuth()
 
   const dropdownItem = (label, icon, onClick) => (
     <div className="dropdown-item">
@@ -57,9 +59,11 @@ function UserAvatar() {
             navigate(`/verperfil/${userId}`)
           )}
           {dropdownItem('Configurações', faCog, () => navigate('/editardados'))}
-          {user?.role === 'ADMIN' &&
-            dropdownItem('Administração', faCog, () =>
-              navigate('/gerenciarsistema')
+          {isAuthenticated &&
+            !user?.companyId &&
+            user?.role !== 'ADMIN' &&
+            dropdownItem('Cadastrar Empresa', faBuilding, () =>
+              navigate('/cadastrar-empresa')
             )}
           <hr className="dropdown-divider" />
           {dropdownItem('Sair do Sistema', faSignOutAlt, () => {

@@ -33,10 +33,7 @@ function ViewProfile() {
 
   const { selectedProfile } = useProfiles()
 
-  const isOwnProfile = useMemo(
-    () => parseInt(userId, 10) === parseInt(params.id, 10),
-    [userId, params]
-  )
+  const isOwnProfile = useMemo(() => userId === params.id, [userId, params])
   const bestJobs = useGetOwnProfile(isOwnProfile && params.id)
   const remoteUser = useGetUserById(isOwnProfile && params.id)
   const remoteProfile = useGetProfileById(

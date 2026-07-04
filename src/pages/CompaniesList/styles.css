@@ -1,0 +1,227 @@
+.companies-page-container {
+  padding: 30px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.companies-search-header-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+  background-color: #fff;
+}
+
+.search-input {
+  height: 48px;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.search-input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 88, 190, 0.1) !important;
+}
+
+.filters-card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+  height: fit-content;
+}
+
+.border-blue {
+  border: 1.5px solid var(--color-accent) !important;
+  background: transparent;
+  color: var(--color-accent) !important;
+}
+
+.border-blue:hover {
+  background-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+
+.btn-clear-filters {
+  margin-top: 15px;
+  border-radius: 20px;
+  height: 40px;
+  transition: all 0.2s ease;
+}
+
+.companies-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.company-item-card {
+  border: 1px solid #eef2f6;
+  border-radius: 16px !important;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 24px;
+}
+
+.company-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 88, 190, 0.08) !important;
+}
+
+.company-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.company-card-body {
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.company-card-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 16px;
+}
+
+.company-card-footer {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+  margin-top: auto;
+}
+
+.company-actions-row {
+  display: flex;
+  gap: 8px;
+  justify-content: stretch;
+}
+
+.company-actions-row .button {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  height: 38px;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+
+.company-logo-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background-color: #f0f4f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.company-logo-avatar.large {
+  width: 65px;
+  height: 65px;
+  border-radius: 16px;
+}
+
+.card-divider {
+  border: 0;
+  height: 1px;
+  background-color: #f1f5f9;
+}
+
+.header-blue {
+  background-color: var(--color-primary) !important;
+  border-bottom: none;
+}
+
+.bg-light {
+  background-color: #f8fafc;
+}
+
+.company-modal-description {
+  line-height: 1.6;
+  color: #475569;
+}
+
+.job-item-modal {
+  border: 1px solid #f1f5f9;
+  box-shadow: none;
+}
+
+.btn-modal-apply {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 15px;
+  height: 34px;
+}
+
+.bg-blue {
+  background-color: var(--color-accent) !important;
+  color: #fff;
+}
+
+.bg-blue:hover {
+  background-color: #004bb0 !important;
+  color: #fff;
+}
+
+.text-blue {
+  color: var(--color-accent);
+}
+
+.text-blue-strong {
+  color: var(--color-primary);
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.border-radius-16 {
+  border-radius: 16px !important;
+}
+
+.border-radius-12 {
+  border-radius: 12px !important;
+}
+
+.size-14 {
+  font-size: 14px !important;
+}
+
+.size-15 {
+  font-size: 15px !important;
+}
+
+.size-13 {
+  font-size: 13px !important;
+}
+
+.is-bold-600 {
+  font-weight: 600;
+}
+
+/* Search Console overrides */
+.companies-search-header-card .input {
+  height: 44px;
+  border-radius: 100px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.companies-search-header-card .input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 88, 190, 0.08) !important;
+}
+
+.companies-search-header-card .button {
+  height: 44px;
+  border-radius: 100px;
+}

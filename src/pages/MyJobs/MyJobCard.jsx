@@ -1,6 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import LinesEllipsis from 'react-lines-ellipsis'
 import { useNavigate } from 'react-router-dom'
 import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
@@ -12,7 +14,7 @@ function MyJobCard({ jobData, isCreatedJob, onDelete }) {
   const navigate = useNavigate()
 
   const { jobId, job } = jobData
-  const { title, description, site, endingDate } = job
+  const { title, description, site, endingDate, companyId } = job
 
   const isExpired = useMemo(() => {
     const now = new Date()
@@ -36,7 +38,21 @@ function MyJobCard({ jobData, isCreatedJob, onDelete }) {
       <div className="job-top-container">
         <div className="description-container">
           <h3>
-            {title}
+            <div className="is-flex is-align-items-center is-justify-content-between">
+              <span>{title}</span>
+              {companyId && (
+                <span
+                  className="tag is-success is-light font-weight-bold ml-2 py-2 px-3 border-radius-8"
+                  style={{ fontSize: '12px' }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className="mr-1 text-success"
+                  />{' '}
+                  Oficial
+                </span>
+              )}
+            </div>
             <sub>{site}</sub>
           </h3>
           <LinesEllipsis

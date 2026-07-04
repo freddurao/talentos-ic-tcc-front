@@ -1,0 +1,47 @@
+.register-company-page-container {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.max-width-600 {
+  max-width: 600px;
+}
+
+.border-blue {
+  border: 1.5px solid var(--color-accent) !important;
+  background: transparent;
+  color: var(--color-accent) !important;
+}
+
+.border-blue:hover {
+  background-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+
+.bg-blue {
+  background-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+
+.bg-blue:hover {
+  background-color: #004bb0 !important;
+  color: #fff !important;
+}
+
+.text-blue-strong {
+  color: var(--color-primary);
+}
+
+.border-radius-16 {
+  border-radius: 16px !important;
+}
+
+.register-description-field textarea {
+  height: 220px !important;
+  min-height: 220px !important;
+}
+
+.border-top-divider {
+  border-top: 1px solid #eef2f6;
+}

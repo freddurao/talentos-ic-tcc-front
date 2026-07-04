@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React, { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { useGetJobById, useJobRoutes } from '../../hooks/jobs'
 import Layout from '../../components/Layout'
 import Text from '../../components/Text'
@@ -146,14 +148,25 @@ function JobDetails() {
             <>
               <div className="detail-top-container">
                 <div>
-                  <Text
-                    className="is-blue is-bold"
-                    text={job.title}
-                    size={24}
-                  />
+                  <div className="is-flex is-align-items-center">
+                    <Text
+                      className="is-blue is-bold"
+                      text={job.title}
+                      size={24}
+                    />
+                    {job.companyId && (
+                      <span className="tag is-success is-light font-weight-bold ml-3 py-2 px-3 border-radius-8" style={{ fontSize: '13px', display: 'inline-flex', alignItems: 'center' }}>
+                        <FontAwesomeIcon icon={faCheckCircle} className="mr-1 text-success" /> Vaga Oficial - {job.company?.name}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="description-top-container">
                   <div className="detail-menu">
+                    {job.company && renderDetailItem(
+                      'Empresa',
+                      job.company.name
+                    )}
                     {renderDetailItem(
                       'Período da Candidatura',
                       `${localDate(job.createdAt)} - ${localDate(
