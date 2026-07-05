@@ -6,7 +6,13 @@
 }
 
 .auth-page .auth-left-container {
-  background-color: var(--color-primary);
+  /* background-color: var(--color-primary); */
+  background: linear-gradient(180deg,
+      rgba(0, 30, 66, 0.7) 0%,
+      rgba(0, 30, 66, 0.99) 100%),
+    url('../../assets/background-register.jpg');
+  background-size: cover;
+  background-position: center;
   display: flex;
   width: 50%;
   align-items: center;
@@ -58,6 +64,7 @@
   width: 100%;
   max-width: 450px;
 }
+
 .auth-page .btn-submit {
   border: none;
   background: var(--color-primary);
