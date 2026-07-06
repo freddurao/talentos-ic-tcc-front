@@ -1,131 +1,218 @@
-<!-- Logo -->
+# Talentos IC - Frontend
 
-<h1 align="center" style="font-family: Ubuntu; font-size: 45px; color: #333; margin-bottom: 0">
-  Talentos IC
-</h1>
-
-<!-- Description -->
-
-<h4 align="center">
-	UFBA - Instituto de Computação - MATE85 - 2022.1 - Grupo 3
-</h4>
-
-## Architecture
-
-![talentic-arquitetura](https://i.imgur.com/EkpSZxv.png)
-
-
-
-<!-- Summary -->
-
-<h2>Summary</h2>
-
-- [:page_with_curl: Deployment Document](#page_with_curl-deployment-document)
-- [:framed_picture: Layout](#framed_picture-layout)
-- [:computer: Demo](#computer-demo)
-- [:rocket: Technologies](#rocket-technologies)
-- [:boom: How to run](#boom-how-to-run)
-    - [Prerequisites](#prerequisites)
-    - [Setting environment variables](#setting-environment-variables)
-    - [Running the application](#running-the-application)
-- [:wrench: Environment variables](#wrench-environment-variables)
-- [:recycle: How to contribute](#recycle-how-to-contribute)
-- [:memo: License](#memo-license)
-
-<a id="doc"></a>
-
-## :page_with_curl: Deployment Document
-
-The deployment document can be found on this [link](https://docs.google.com/document/d/1-MTmP5WswbvFB25XE1YlzXn-FZ0LhCXj2cAWlHahfpg/edit?usp=sharing).
-
-<a id="layout"></a>
-
-## :framed_picture: Layout
-
-The layout prototype of this application is available on [Figma](https://www.figma.com/file/Z6loIYv1xVtCgkyf3BzHp3/MATE85---Grupo-3?node-id=0%3A1).
-
-Icons used on this project are from [Linearicons](https://linearicons.com/free).
-
-<a id="demo"></a>
-
-## :computer: Demo
-
-This application was hosted by [Heroku](https://www.heroku.com/) e can be found here: [Talentos IC](https://talentosic-vagas.herokuapp.com/).
-
-<a id="tecnologias"></a>
-
-## :rocket: Technologies
-
-This application uses this following technologies:
-
-- [ReactJS](https://reactjs.org/)
-- [ESLint](https://eslint.org/) (Code standardization)
-- [Prettier](https://prettier.io/) (Code formatting)
-- [React Router](https://reactrouter.com/web/guides/quick-start)
-- [Bulma](https://bulma.io/)
-- [Axios](https://axios-http.com/)
-
-<a id="como-executar"></a>
-
-## :boom: How to run
-
-#### Prerequisites
-
-To run this application, you need to have it on your machine:
-
-- [NodeJS](https://nodejs.org/en/download/)
-
-
-#### Setting environment variables
-```sh
-# Copy .env from .env.example to setup environment variables
-$ cp .env.example .env
-```
-
-#### Running the application
-
-```sh
-# Clone this repository
-$ git clone https://github.com/mate85-vagas/vagas-frontend
-
-# Move to root directory
-$ cd vagas-frontend
-
-# Install dependencies
-$ npm install
-
-# Run on a local server
-$ npm start
-```
-
-#### Running the tests
-
-```sh
-# Searches and runs all tests
-$ npm test
-```
-
-<a id="variaveis-ambiente"></a>
-
-## :wrench: Environment variables
-
-| Name          | Description     | Default               |
-| -             | -               | -                     |
-| REACT_APP_API | URL of the API  | http://127.0.0.1:5000 |
+Frontend da aplicação **Talentos IC**, desenvolvido em React e responsável pela interface do usuário, autenticação e comunicação com a API.
 
 ---
 
-<a id="como-contribuir"></a>
+## Tecnologias
 
-## :recycle: How to contribute
+O projeto foi desenvolvido utilizando:
 
-- Fork this repository
-- Create a branch with the name of your feature: `git checkout -b my-feature`
-- Commit your changes: `git commit -m 'feat: My new feature'`
-- Push your branch: `git push origin my-feature`
+- Node.js
+- React
+- React Router 
+- Axios
+- Bulma
+- Docker
+- ESLint
+- Prettier
 
-<a id="licenca"></a>
+---
 
-## :memo: License
+## Arquitetura
 
-To be defined...
+A arquitetura da aplicação pode ser visualizada na imagem abaixo.
+
+[Arquitetura do Projeto](https://imgur.com/a/gg1vlhT)
+
+---
+
+## Documentação
+
+### Manual de Implantação
+
+A documentação completa de implantação encontra-se disponível [aqui](https://docs.google.com/document/d/1IlNzT2h87PjmWpdiZwCwqP_4VFyZkq6ARqbqVcQJrlk/edit?usp=sharing).
+
+### Prototipação
+
+O protótipo da interface pode ser acessado através do Figma:
+
+> **Figma:** https://www.figma.com/design/3pqEFG0PjnKyN2JtaTxePs/Talentic---Refactor?node-id=0-1&t=IKaJ0yv5yCiBMqox-1
+
+> **Observação:** O protótipo representa a concepção inicial da interface. A implementação atual contempla atualizações e melhorias realizadas durante a evolução do projeto.
+
+---
+
+## Como executar
+
+### Pré-requisitos
+
+- Node.js 18 ou superior
+
+---
+
+### Clonando o repositório
+
+```bash
+git clone https://github.com/freddurao/talentos-ic-tcc-front
+
+cd talentos-ic-tcc-front
+```
+
+---
+
+### Configurando o ambiente
+
+Crie o arquivo `.env` a partir do exemplo:
+
+```bash
+cp .env.example .env
+```
+
+Configure as variáveis de ambiente conforme necessário.
+
+---
+
+### Executando localmente (sem Docker)
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Configure as variáveis de ambiente:
+
+```env
+REACT_APP_API=http://localhost:5000
+HOME_URL=http://localhost:3000
+```
+
+> **Observação:** Caso o backend esteja sendo executado através do Docker Compose, utilize `http://localhost:5001` como valor para `REACT_APP_API`.
+
+Inicie a aplicação:
+
+```bash
+npm start
+```
+
+Após a inicialização, o frontend estará disponível em:
+
+| Serviço | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+
+---
+
+### Executando com Docker
+
+Para executar o ambiente completo da aplicação, utilize o arquivo `docker-compose.yml` disponível no repositório do backend.
+
+No diretório do backend execute:
+
+```bash
+docker compose up --build
+```
+
+Serão iniciados automaticamente os seguintes serviços:
+
+- PostgreSQL
+- Backend
+- Frontend
+
+Após a inicialização, a aplicação estará disponível em:
+
+| Serviço | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+
+---
+
+## Variáveis de Ambiente
+
+| Variável | Descrição | Valor padrão |
+|----------|-----------|---------------|
+| REACT_APP_API | URL da API | http://127.0.0.1:5000 |
+| HOME_URL | URL da aplicação | http://127.0.0.1:3000 |
+
+> **Observação:** Quando o backend for executado através do Docker Compose, utilize `http://127.0.0.1:5001` como valor para `REACT_APP_API`.
+
+---
+
+## Estrutura do Projeto
+
+```text
+src/
+├── assets/          # Imagens, ícones e arquivos estáticos
+├── components/      # Componentes reutilizáveis da interface
+├── contexts/        # Contextos globais da aplicação
+├── hooks/           # Hooks customizados para acesso à API e gerenciamento de estado
+├── pages/           # Páginas da aplicação
+├── routes/          # Configuração das rotas
+├── utils/           # Funções utilitárias
+├── __tests__/       # Testes unitários
+├── api.js           # Configuração da comunicação com a API
+├── App.js           # Componente principal
+└── index.js         # Ponto de entrada da aplicação
+```
+
+---
+
+## Testes
+
+Execute os testes com:
+
+```bash
+npm test
+```
+
+---
+
+## Padronização de Código
+
+O projeto utiliza **ESLint** e **Prettier** para padronização do código.
+
+No Visual Studio Code recomenda-se habilitar a formatação automática adicionando as seguintes configurações:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}
+```
+
+---
+
+## Como contribuir
+
+1. Faça um fork do repositório.
+
+2. Crie uma branch para sua funcionalidade:
+
+```bash
+git checkout -b feature/minha-feature
+```
+
+3. Realize as alterações desejadas.
+
+4. Faça o commit:
+
+```bash
+git commit -m "feat: descrição da funcionalidade"
+```
+
+5. Envie a branch para o seu fork:
+
+```bash
+git push origin feature/minha-feature
+```
+
+6. Abra um Pull Request.
+
+---
+
+## Licença
+
+Projeto desenvolvido no âmbito da Universidade Federal da Bahia (UFBA).
+
+A definição da licença permanece pendente.
