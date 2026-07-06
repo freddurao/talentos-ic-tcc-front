@@ -457,7 +457,7 @@ function CompaniesList() {
             className="modal-background"
             onClick={() => setIsJobsModalOpen(false)}
           />
-          <div className="modal-card border-radius-16">
+          <div className="modal-card border-radius-16" style={{ width: '650px', maxWidth: '95%' }}>
             <header className="modal-card-head header-blue px-5 py-4">
               <p className="modal-card-title has-text-white font-weight-bold">
                 Vagas em aberto - {selectedCompany.name}
@@ -495,16 +495,16 @@ function CompaniesList() {
                     return (
                       <div
                         key={job.id}
-                        className="job-item-modal card p-4 mb-3 border-radius-12 border-light"
+                        className="job-item-modal card p-4 mb-3 border-radius-12"
                       >
-                        <div className="is-flex is-justify-content-between is-align-items-center">
-                          <div>
+                        <div className="job-item-container">
+                          <div className="job-item-info">
                             <Text
                               text={job.title}
                               size={16}
                               className="is-bold-700 text-blue-strong mb-1"
                             />
-                            <div className="has-text-grey size-13">
+                            <div className="has-text-grey size-13 job-item-meta">
                               <span className="mr-3">
                                 <FontAwesomeIcon
                                   icon={faMapMarkerAlt}
@@ -515,18 +515,20 @@ function CompaniesList() {
                               <span>• {job.type || 'CLT'}</span>
                             </div>
                           </div>
-                          <button
-                            type="button"
-                            className={`button is-rounded btn-modal-apply ${
-                              isApplied
-                                ? 'is-success is-light'
-                                : 'bg-blue has-text-white'
-                            }`}
-                            onClick={() => !isApplied && handleApply(job.id)}
-                            disabled={isApplied}
-                          >
-                            {isApplied ? 'Candidatado' : 'Candidatar-se'}
-                          </button>
+                          <div className="job-item-action">
+                            <button
+                              type="button"
+                              className={`button is-rounded btn-modal-apply ${
+                                isApplied
+                                  ? 'is-success is-light'
+                                  : 'bg-blue has-text-white'
+                              }`}
+                              onClick={() => !isApplied && handleApply(job.id)}
+                              disabled={isApplied}
+                            >
+                              {isApplied ? 'Candidatado' : 'Candidatar-se'}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     )

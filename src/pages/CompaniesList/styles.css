@@ -151,15 +151,80 @@
 }
 
 .job-item-modal {
-  border: 1px solid #f1f5f9;
-  box-shadow: none;
+  border: 1px solid #eef2f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease-in-out;
+}
+
+.job-item-modal:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 88, 190, 0.06);
+}
+
+.job-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.job-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-item-meta {
+  margin-top: 4px;
+}
+
+.job-item-action {
+  flex-shrink: 0;
 }
 
 .btn-modal-apply {
   font-size: 13px;
   font-weight: 700;
-  padding: 0 15px;
-  height: 34px;
+  padding: 0 20px;
+  height: 36px;
+  transition: all 0.2s ease;
+}
+
+.modal-jobs-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.modal-jobs-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-jobs-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.modal-jobs-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.modal-jobs-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 576px) {
+  .job-item-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .job-item-action .btn-modal-apply {
+    width: 100%;
+  }
 }
 
 .bg-blue {
