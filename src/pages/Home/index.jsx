@@ -202,7 +202,7 @@ function Home() {
 
           <Link
             className="btn-primary"
-            to="/cadastro"
+            to="/register"
           >
             Criar Conta
           </Link>
