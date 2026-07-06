@@ -168,21 +168,6 @@ npm test
 
 ---
 
-## Padronização de Código
-
-O projeto utiliza **ESLint** e **Prettier** para padronização do código.
-
-No Visual Studio Code recomenda-se habilitar a formatação automática adicionando as seguintes configurações:
-
-```json
-{
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
-}
-```
-
----
-
 ## Como contribuir
 
 1. Faça um fork do repositório.
