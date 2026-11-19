@@ -170,29 +170,14 @@ npm test
 
 ## Como contribuir
 
-1. Faça um fork do repositório.
+O fluxo de contribuição e a nomenclatura do backlog são os mesmos nos dois repositórios. Eles estão descritos no README do backend: **[Como contribuir](https://github.com/freddurao/talents-ic-tcc#como-contribuir)** e **[Backlog](https://github.com/freddurao/talents-ic-tcc#backlog)**.
 
-2. Crie uma branch para sua funcionalidade:
+Resumo:
 
-```bash
-git checkout -b feature/minha-feature
-```
-
-3. Realize as alterações desejadas.
-
-4. Faça o commit:
-
-```bash
-git commit -m "feat: descrição da funcionalidade"
-```
-
-5. Envie a branch para o seu fork:
-
-```bash
-git push origin feature/minha-feature
-```
-
-6. Abra um Pull Request.
+- Toda branch sai da `development` e volta para ela por Pull Request. A `main` só recebe a `development` quando uma etapa é concluída.
+- Branches: `fix/…`, `feat/…`, `refactor/…`, `docs/…` ou `chore/…`, com nome curto em português. Quando a mudança envolve backend e frontend, use o mesmo nome de branch nos dois repositórios.
+- Commits no padrão Conventional Commits, em português, com os IDs do backlog no fim do título. Exemplo: `fix(perfil): corrige tela quebrando ao recarregar [C-03, P-05]`.
+- Os IDs (`V-02`, `AD-01`…) vêm do documento **[Talentos IC — Backlog do tour de telas](https://claude.ai/artifact/HyLMeNa7ik7y5mxnqKWHGH)**.
 
 ---
 
