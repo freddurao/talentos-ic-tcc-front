@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Text from '../../components/Text'
@@ -8,7 +8,7 @@ import ButtonArrow from '../../components/Buttons/ButtonArrow'
 import useAuth from '../../hooks/useAuth'
 import { isEmailValid } from '../../utils/validations'
 import { translate } from '../../utils/translations'
-import { keepQueryOnUrl } from '../../utils/conversions'
+import { postLoginQuery } from '../../utils/conversions'
 import { useSearchObject } from '../../hooks/url'
 import './styles.css'
 import ResetPasswordModal from '../../components/Modals/ResetPassword'
@@ -26,11 +26,9 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const hasCreateJob = useMemo(() => search.criarvaga === '1', [search])
-
   const navigateToJobList = () => navigate('/')
   const navigateToRegister = () =>
-    navigate(keepQueryOnUrl('/register', 'criarvaga=1', hasCreateJob))
+    navigate(`/register${postLoginQuery(search)}`)
 
   const isEmailInvalid = () => !isEmailValid(email)
   const isPasswordInvalid = () => password === ''

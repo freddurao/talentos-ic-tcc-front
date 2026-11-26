@@ -34,3 +34,18 @@ export const sanitizeStringToSearch = (text) => {
 // Append query on url based on condition
 export const keepQueryOnUrl = (url, query, condition) =>
   condition ? `${url}?${query}` : url
+
+// Para onde levar a pessoa depois do login ou do cadastro, a partir da query da URL:
+// a vaga em que ela clicou em "Aplicar" (?vaga=<id>) ou a criação de vaga (?criarvaga=1)
+export const postLoginPath = (search = {}) => {
+  if (search.vaga) return `/vagas/${encodeURIComponent(search.vaga)}`
+  if (search.criarvaga === '1') return '/formulariovaga/criar?home=1'
+  return '/'
+}
+
+// Mantém essa informação ao alternar entre as telas de login e de cadastro
+export const postLoginQuery = (search = {}) => {
+  if (search.vaga) return `?vaga=${encodeURIComponent(search.vaga)}`
+  if (search.criarvaga === '1') return '?criarvaga=1'
+  return ''
+}
