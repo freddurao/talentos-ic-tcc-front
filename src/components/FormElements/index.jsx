@@ -15,6 +15,7 @@ function SelectBox({
   value,
   onChange,
   hasError,
+  disabled,
 }) {
   return (
     <div className={`control ${className}`}>
@@ -35,6 +36,7 @@ function SelectBox({
           } default-form-element select-box`}
           onChange={(e) => onChange(e)}
           value={value}
+          disabled={disabled}
         >
           {initialOption !== '' && <option value="">{initialOption}</option>}
           {options.map((option) => {
@@ -62,6 +64,7 @@ SelectBox.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onChange: PropTypes.func,
   hasError: PropTypes.bool,
+  disabled: PropTypes.bool,
 }
 
 SelectBox.defaultProps = {
@@ -75,6 +78,7 @@ SelectBox.defaultProps = {
   onChange: null,
   hasError: false,
   value: '',
+  disabled: false,
 }
 
 /**

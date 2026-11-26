@@ -142,7 +142,7 @@ export const useAdminRoutes = () => {
         return true
       }
     } catch (err) {
-      toast.error('Erro ao atualizar usuário.')
+      toast.error(err.response?.data?.message || 'Erro ao atualizar usuário.')
     }
     return false
   }
@@ -157,7 +157,7 @@ export const useAdminRoutes = () => {
         return true
       }
     } catch (err) {
-      toast.error('Erro ao excluir usuário.')
+      toast.error(err.response?.data?.message || 'Erro ao excluir usuário.')
     }
     return false
   }
