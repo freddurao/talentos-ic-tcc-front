@@ -14,6 +14,7 @@ import {
   jobTypes,
 } from '../../utils/constants/project'
 import { translate } from '../../utils/translations'
+import { getJobDatesError, todayDateString } from '../../utils/validations'
 import './styles.css'
 
 // Component that renders the page to create, edit or delete a job
@@ -84,6 +85,11 @@ function JobForm() {
   }
 
   const onSaveConfirm = async () => {
+    // Fecha o modal de confirmação: se houver erro, o aviso aparece e o formulário
+    // fica livre para a pessoa corrigir
+    setSaveModalOpened(false)
+    setCreateModalOpened(false)
+
     if (hasJobChanges()) {
       if (
         isTitleInvalid() ||
@@ -100,8 +106,16 @@ function JobForm() {
         return
       }
 
+      const datesError = getJobDatesError(startingDate, endingDate)
+      if (datesError) {
+        toast.error(datesError)
+        setHasError(true)
+        return
+      }
+
+      let saved = false
       if (isCreationForm) {
-        await createJob(
+        saved = await createJob(
           description,
           scholarity,
           title,
@@ -114,7 +128,7 @@ function JobForm() {
           userId
         )
       } else if (job) {
-        await updateJob(
+        saved = await updateJob(
           jobId,
           description,
           scholarity,
@@ -128,6 +142,8 @@ function JobForm() {
           userId
         )
       }
+      // Se o servidor recusou, fica no formulário para a pessoa corrigir
+      if (!saved) return
     }
 
     navigate('/minhasvagas?criadas=1')
@@ -262,7 +278,7 @@ function JobForm() {
 
               <div className="column is-12 mb-2">
                 <DateBox
-                  label="Data de Início do Trabalho"
+                  label="Início das Candidaturas"
                   labelLarge
                   value={startingDate}
                   onChange={(e) => setStartingDate(e.target.value)}
@@ -276,7 +292,16 @@ function JobForm() {
                   labelLarge
                   value={endingDate}
                   onChange={(e) => setEndingDate(e.target.value)}
-                  hasError={hasError && isEndingDateInvalid()}
+                  hasError={
+                    hasError &&
+                    (isEndingDateInvalid() ||
+                      !!getJobDatesError(startingDate, endingDate))
+                  }
+                  min={
+                    startingDate && startingDate > todayDateString()
+                      ? startingDate
+                      : todayDateString()
+                  }
                 />
               </div>
             </div>

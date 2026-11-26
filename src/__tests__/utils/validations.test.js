@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import { isEmailValid } from '../../utils/validations'
+import { getJobDatesError, isEmailValid } from '../../utils/validations'
 
 describe('testing isEmailValid function', () => {
   describe('when string is empty', () => {
@@ -22,5 +22,38 @@ describe('testing isEmailValid function', () => {
       expect(isEmailValid('fulano@email')).toBeFalsy()
       expect(isEmailValid('fulano@email.')).toBeFalsy()
     })
+  })
+})
+
+describe('testing getJobDatesError function', () => {
+  const today = '2026-11-26'
+
+  it('should accept a valid period', () => {
+    expect(getJobDatesError('2026-12-01', '2026-12-20', today)).toBeNull()
+  })
+
+  it('should accept a period ending today', () => {
+    expect(getJobDatesError(today, today, today)).toBeNull()
+  })
+
+  it('should accept a period that started in the past', () => {
+    expect(getJobDatesError('2026-11-01', '2026-12-20', today)).toBeNull()
+  })
+
+  it('should reject missing dates', () => {
+    expect(getJobDatesError('', '2026-12-20', today)).toMatch(/Informe/)
+    expect(getJobDatesError('2026-12-01', '', today)).toMatch(/Informe/)
+  })
+
+  it('should reject an end before the start', () => {
+    expect(getJobDatesError('2026-12-20', '2026-12-01', today)).toMatch(
+      /antes do início/
+    )
+  })
+
+  it('should reject an end in the past', () => {
+    expect(getJobDatesError('2026-11-01', '2026-11-25', today)).toMatch(
+      /passado/
+    )
   })
 })
