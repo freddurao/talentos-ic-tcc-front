@@ -162,6 +162,7 @@ function DateBox({
   onChange,
   name,
   hasError,
+  min,
 }) {
   return (
     <div className={`control ${className}`}>
@@ -177,6 +178,7 @@ function DateBox({
         className={`input ${hasError ? 'is-danger' : ''} default-form-element`}
         onChange={(e) => onChange(e)}
         value={value}
+        min={min}
       />
     </div>
   )
@@ -190,6 +192,7 @@ DateBox.propTypes = {
   onChange: PropTypes.func,
   name: PropTypes.string,
   hasError: PropTypes.bool,
+  min: PropTypes.string,
 }
 
 DateBox.defaultProps = {
@@ -200,6 +203,7 @@ DateBox.defaultProps = {
   onChange: null,
   name: null,
   hasError: false,
+  min: undefined,
 }
 
 function Button({ label, onClick, id, scheme }) {

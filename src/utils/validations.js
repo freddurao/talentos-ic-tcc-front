@@ -53,3 +53,26 @@ export const isCNPJValid = (cnpj) => {
 
   return true
 }
+
+// Data de hoje no fuso de quem está usando, no formato AAAA-MM-DD (o mesmo do <input type="date">)
+export const todayDateString = () => {
+  const now = new Date()
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+}
+
+// Valida o período de candidatura da vaga. Devolve a mensagem de erro ou null.
+// Mesmas regras do backend (utils/validation.js): fim depois do início e não no passado.
+export const getJobDatesError = (
+  startingDate,
+  endingDate,
+  today = todayDateString()
+) => {
+  if (!startingDate || !endingDate)
+    return 'Informe o início e o fim do período de candidatura.'
+  if (endingDate < startingDate)
+    return 'O fim do período de candidatura não pode ser antes do início.'
+  if (endingDate < today)
+    return 'O fim do período de candidatura não pode estar no passado.'
+  return null
+}

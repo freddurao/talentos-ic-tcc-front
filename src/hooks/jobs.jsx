@@ -54,29 +54,34 @@ export const useJobRoutes = () => {
     userId,
     emailsToSend
   ) => {
-    if (startingDate === undefined || endingDate === undefined)
-      toast.error('Os campos "Inicio" e "Fim" não podem estar vazio.')
+    try {
+      const response = await api.post(`/vagas`, {
+        description,
+        scholarity,
+        title,
+        type,
+        site,
+        workload,
+        salary,
+        endingDate,
+        startingDate,
+        userId,
+        emailsToSend,
+      })
 
-    const response = await api.post(`/vagas`, {
-      description,
-      scholarity,
-      title,
-      type,
-      site,
-      workload,
-      salary,
-      endingDate,
-      startingDate,
-      userId,
-      emailsToSend,
-    })
+      if (response.data.message) {
+        if (response.data.error) toast.error(response.data.message)
+        else toast.success(response.data.message)
+      }
 
-    if (response.data.message) {
-      if (response.data.error) toast.error(response.data.message)
-      else toast.success(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return !response.data.error
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'Não foi possível criar a vaga.'
+      )
+      return false
     }
-
-    handleNotAuthorized(response, navigate)
   }
 
   const updateJob = async (
@@ -92,28 +97,33 @@ export const useJobRoutes = () => {
     startingDate,
     userId
   ) => {
-    if (startingDate === undefined || endingDate === undefined)
-      toast.error('Os campos "Inicio" e "Fim" não podem estar vazio.')
+    try {
+      const response = await api.patch(`/vagas/${jobId}`, {
+        description,
+        scholarity,
+        title,
+        type,
+        site,
+        workload,
+        salary,
+        endingDate,
+        startingDate,
+        userId,
+      })
 
-    const response = await api.patch(`/vagas/${jobId}`, {
-      description,
-      scholarity,
-      title,
-      type,
-      site,
-      workload,
-      salary,
-      endingDate,
-      startingDate,
-      userId,
-    })
+      if (response.data.message) {
+        if (response.data.error) toast.error(response.data.message)
+        else toast.success(response.data.message)
+      }
 
-    if (response.data.message) {
-      if (response.data.error) toast.error(response.data.message)
-      else toast.success(response.data.message)
+      handleNotAuthorized(response, navigate)
+      return !response.data.error
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'Não foi possível atualizar a vaga.'
+      )
+      return false
     }
-
-    handleNotAuthorized(response, navigate)
   }
 
   const deleteJob = async (id) => {
