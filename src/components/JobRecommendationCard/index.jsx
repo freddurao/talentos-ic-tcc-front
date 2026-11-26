@@ -16,24 +16,24 @@ import { useJobRoutes, getFeedbackStatus } from '../../hooks/jobs'
 function JobRecommendationCard({ data }) {
   const { title, description, site, endingDate, id, companyId } = data
   const { feedbackJobs } = useJobRoutes()
-  const likeFeedback = () => {
-    feedbackJobs(id, 'like')
-    window.location.reload()
-  }
-  const dislikeFeedback = () => {
-    feedbackJobs(id, 'dislike')
-    window.location.reload()
-  }
-  const removeFeedback = () => {
-    window.location.reload()
-    feedbackJobs(id, 'neutro')
-  }
 
+  // Valores do backend: 'none' (sem voto), 'like' ou 'dislike'
   const [feedbackStatus, setFeedbackStatus] = useState('')
   const status = getFeedbackStatus(id)
   useEffect(() => {
     setFeedbackStatus(status)
   }, [status])
+
+  // Atualiza o botão na hora e desfaz se o servidor recusar (sem recarregar a página)
+  const changeFeedback = async (newStatus) => {
+    const previousStatus = feedbackStatus
+    setFeedbackStatus(newStatus)
+    const saved = await feedbackJobs(id, newStatus)
+    if (!saved) setFeedbackStatus(previousStatus)
+  }
+  const likeFeedback = () => changeFeedback('like')
+  const dislikeFeedback = () => changeFeedback('dislike')
+  const removeFeedback = () => changeFeedback('none')
 
   const renderNeutro = () => {
     return (
@@ -130,13 +130,11 @@ function JobRecommendationCard({ data }) {
           height: '50px',
         }}
       >
-        {/* eslint-disable */}
-        {console.log('Esse e o feedbackstatus', feedbackStatus)}
-        {feedbackStatus === 'neutro'
-          ? renderNeutro()
-          : feedbackStatus === 'dislike'
-          ? renderDislike()
-          : renderLike()}
+        {feedbackStatus === 'like' && renderLike()}
+        {feedbackStatus === 'dislike' && renderDislike()}
+        {feedbackStatus !== 'like' &&
+          feedbackStatus !== 'dislike' &&
+          renderNeutro()}
       </div>
       <div>
         <Button
