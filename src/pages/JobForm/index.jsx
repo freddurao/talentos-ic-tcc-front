@@ -23,9 +23,21 @@ function JobForm() {
   const params = useParams()
   const isCreationForm = params.type === 'criar'
 
-  const { userId } = useAuth()
+  const { userId, user } = useAuth()
 
-  const { job, jobId } = useGetJobById(params.id)
+  const { job, jobId, userId: jobOwnerId } = useGetJobById(params.id)
+
+  // Só o dono da vaga e o admin podem editá-la. O backend também recusa (403), mas
+  // sem isto a pessoa preencheria o formulário inteiro para nada. jobOwnerId fica
+  // undefined até a vaga carregar (e null numa vaga sem dono, que só o admin edita).
+  useEffect(() => {
+    if (isCreationForm || jobOwnerId === undefined || !userId || !user) return
+    const canEdit = user.role === 'ADMIN' || jobOwnerId === userId
+    if (!canEdit) {
+      toast.error('Você não tem permissão para editar esta vaga.')
+      navigate(`/vagas/${params.id}`, { replace: true })
+    }
+  }, [isCreationForm, jobOwnerId, userId, user, navigate, params.id])
 
   const [deleteModalOpened, setDeleteModalOpened] = useState(false)
   const [saveModalOpened, setSaveModalOpened] = useState(false)
