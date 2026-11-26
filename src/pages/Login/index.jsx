@@ -55,7 +55,14 @@ function Login() {
     try {
       await login(email, password)
     } catch (error) {
-      toast.error('Usuário ou senha errados.')
+      // 401 = e-mail ou senha errados. Nos outros casos (conta desativada, muitas
+      // tentativas...), mostra a mensagem que o servidor mandou.
+      const { status, data } = error.response || {}
+      toast.error(
+        status === 401
+          ? 'Usuário ou senha errados.'
+          : data?.message || 'Algo não funcionou como esperado'
+      )
     }
   }
 
@@ -69,7 +76,11 @@ function Login() {
       .then(() =>
         toast.success('Link enviado para o e-mail caso a conta exista!')
       )
-      .catch(() => toast.error('Algo não funcionou como esperado'))
+      .catch((error) =>
+        toast.error(
+          error?.response?.data?.message || 'Algo não funcionou como esperado'
+        )
+      )
     setResetPasswordModalOpened(false)
   }
 
