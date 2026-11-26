@@ -3,6 +3,8 @@ import {
   keepQueryOnUrl,
   localDate,
   numberToReais,
+  postLoginPath,
+  postLoginQuery,
   sanitizeStringToSearch,
 } from '../../utils/conversions'
 import { translate } from '../../utils/translations'
@@ -112,5 +114,42 @@ describe('testing keepQueryOnUrl function', () => {
         expect(keepQueryOnUrl('', '', true)).toBe('?')
       })
     })
+  })
+})
+
+describe('testing postLoginPath function', () => {
+  it('should go to the job when there is a vaga param', () => {
+    expect(postLoginPath({ vaga: 'abc-123' })).toBe('/vagas/abc-123')
+  })
+
+  it('should go to the job form when there is criarvaga=1', () => {
+    expect(postLoginPath({ criarvaga: '1' })).toBe('/formulariovaga/criar?home=1')
+  })
+
+  it('should prefer the job over the job form', () => {
+    expect(postLoginPath({ vaga: 'abc', criarvaga: '1' })).toBe('/vagas/abc')
+  })
+
+  it('should go home otherwise', () => {
+    expect(postLoginPath({})).toBe('/')
+    expect(postLoginPath()).toBe('/')
+  })
+
+  it('should not let the param escape the job route', () => {
+    expect(postLoginPath({ vaga: '../admin' })).toBe('/vagas/..%2Fadmin')
+  })
+})
+
+describe('testing postLoginQuery function', () => {
+  it('should keep the vaga param', () => {
+    expect(postLoginQuery({ vaga: 'abc-123' })).toBe('?vaga=abc-123')
+  })
+
+  it('should keep criarvaga=1', () => {
+    expect(postLoginQuery({ criarvaga: '1' })).toBe('?criarvaga=1')
+  })
+
+  it('should return an empty string otherwise', () => {
+    expect(postLoginQuery({})).toBe('')
   })
 })

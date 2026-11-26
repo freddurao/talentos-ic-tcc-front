@@ -8,7 +8,7 @@ import useAuth from '../../hooks/useAuth'
 import { isEmailValid, isPasswordValid } from '../../utils/validations'
 import { translate } from '../../utils/translations'
 import './styles.css'
-import { keepQueryOnUrl } from '../../utils/conversions'
+import { postLoginQuery } from '../../utils/conversions'
 import { useSearchObject } from '../../hooks/url'
 
 // Component that renders the page to register a new user
@@ -25,8 +25,7 @@ function Register() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const navigateToLogin = () =>
-    navigate(keepQueryOnUrl('/login', 'criarvaga=1', search.criarvaga === '1'))
+  const navigateToLogin = () => navigate(`/login${postLoginQuery(search)}`)
 
   const isNameInvalid = () => name === ''
   const isEmailInvalid = () => !isEmailValid(email)
