@@ -18,6 +18,7 @@ import TextInput from '../../components/TextInput'
 import { useGetCompanies, useCompanyActions } from '../../hooks/companies'
 import useAuth from '../../hooks/useAuth'
 import api from '../../api'
+import { includesIgnoringAccents } from '../../utils/conversions'
 import { toast } from 'react-toastify'
 import { useJobRoutes } from '../../hooks/jobs'
 import { useGetAppliedJobs } from '../../hooks/user'
@@ -79,24 +80,17 @@ function CompaniesList() {
       const cWeb = c.website || ''
       const cSeg = c.segment || ''
 
-      const nameMatch = cName
-        .toLowerCase()
-        .includes(searchParams.name.toLowerCase())
-      const descMatch = cDesc
-        .toLowerCase()
-        .includes(searchParams.segment.toLowerCase())
-      const segmentMatch = cSeg
-        .toLowerCase()
-        .includes(searchParams.segment.toLowerCase())
-      const websiteMatch = cWeb
-        .toLowerCase()
-        .includes(searchParams.segment.toLowerCase())
+      // Ignora maiúsculas e acentos ("solucoes" encontra "Soluções")
+      const nameMatch = includesIgnoringAccents(cName, searchParams.name)
+      const descMatch = includesIgnoringAccents(cDesc, searchParams.segment)
+      const segmentMatch = includesIgnoringAccents(cSeg, searchParams.segment)
+      const websiteMatch = includesIgnoringAccents(cWeb, searchParams.segment)
 
       const globalMatch =
         !searchParams.global ||
-        cName.toLowerCase().includes(searchParams.global.toLowerCase()) ||
-        cDesc.toLowerCase().includes(searchParams.global.toLowerCase()) ||
-        cSeg.toLowerCase().includes(searchParams.global.toLowerCase())
+        includesIgnoringAccents(cName, searchParams.global) ||
+        includesIgnoringAccents(cDesc, searchParams.global) ||
+        includesIgnoringAccents(cSeg, searchParams.global)
 
       return (
         nameMatch && (descMatch || websiteMatch || segmentMatch) && globalMatch

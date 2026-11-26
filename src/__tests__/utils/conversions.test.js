@@ -1,7 +1,9 @@
 import '@testing-library/jest-dom/extend-expect'
 import {
+  includesIgnoringAccents,
   keepQueryOnUrl,
   localDate,
+  normalizeForSearch,
   numberToReais,
   postLoginPath,
   postLoginQuery,
@@ -123,7 +125,9 @@ describe('testing postLoginPath function', () => {
   })
 
   it('should go to the job form when there is criarvaga=1', () => {
-    expect(postLoginPath({ criarvaga: '1' })).toBe('/formulariovaga/criar?home=1')
+    expect(postLoginPath({ criarvaga: '1' })).toBe(
+      '/formulariovaga/criar?home=1'
+    )
   })
 
   it('should prefer the job over the job form', () => {
@@ -151,5 +155,33 @@ describe('testing postLoginQuery function', () => {
 
   it('should return an empty string otherwise', () => {
     expect(postLoginQuery({})).toBe('')
+  })
+})
+
+describe('testing normalizeForSearch function', () => {
+  it('should remove accents and lowercase the text', () => {
+    expect(normalizeForSearch('João Estágio ÇÃ')).toBe('joao estagio ca')
+  })
+
+  it('should handle empty values', () => {
+    expect(normalizeForSearch('')).toBe('')
+    expect(normalizeForSearch(undefined)).toBe('')
+    expect(normalizeForSearch(null)).toBe('')
+  })
+})
+
+describe('testing includesIgnoringAccents function', () => {
+  it('should match ignoring accents and case', () => {
+    expect(includesIgnoringAccents('TechBahia Soluções', 'solucoes')).toBe(true)
+    expect(includesIgnoringAccents('Estágio', 'ESTAGIO')).toBe(true)
+    expect(includesIgnoringAccents('joão@example.com', 'joao')).toBe(true)
+  })
+
+  it('should not match different text', () => {
+    expect(includesIgnoringAccents('Dados e IA', 'software')).toBe(false)
+  })
+
+  it('should match everything when the term is empty', () => {
+    expect(includesIgnoringAccents('Qualquer coisa', '')).toBe(true)
   })
 })
