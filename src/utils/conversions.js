@@ -49,3 +49,14 @@ export const postLoginQuery = (search = {}) => {
   if (search.criarvaga === '1') return '?criarvaga=1'
   return ''
 }
+
+// Texto em minúsculas e sem acentos, para comparar buscas feitas no navegador
+export const normalizeForSearch = (text = '') =>
+  String(text ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+
+// "joao" encontra "João", "ESTAGIO" encontra "Estágio"
+export const includesIgnoringAccents = (text, term) =>
+  normalizeForSearch(text).includes(normalizeForSearch(term))

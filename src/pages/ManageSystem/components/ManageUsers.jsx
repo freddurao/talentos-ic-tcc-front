@@ -17,6 +17,7 @@ import ConfirmModal from '../../../components/Modals/ConfirmModal'
 import { useGetUsers, useAdminRoutes } from '../../../hooks/admin'
 import { SelectBox } from '../../../components/FormElements'
 import useAuth from '../../../hooks/useAuth'
+import { includesIgnoringAccents } from '../../../utils/conversions'
 
 function ManageUsers() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -45,8 +46,8 @@ function ManageUsers() {
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      includesIgnoringAccents(user.name, searchTerm) ||
+      includesIgnoringAccents(user.email, searchTerm)
 
     const matchesRole = roleFilter === 'ALL' || user.role === roleFilter
     const matchesStatus =
