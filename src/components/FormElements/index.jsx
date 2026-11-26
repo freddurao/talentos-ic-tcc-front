@@ -97,10 +97,17 @@ function SearchBox({
   onSearch,
   value,
 }) {
+  // Um <form> faz o Enter no campo disparar a busca, igual ao clique no botão.
+  // preventDefault evita que o navegador recarregue a página ao enviar o formulário.
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onSearch(e)
+  }
+
   return (
     <div className={`control ${className}`}>
       {label && <span className="label">{label}</span>}
-      <div className="search-box">
+      <form className="search-box" onSubmit={handleSubmit}>
         <input
           placeholder={placeholder}
           name={inputName}
@@ -112,7 +119,6 @@ function SearchBox({
         <button
           type="submit"
           id="search-box-submit"
-          onClick={onSearch}
           className={`${searchButton ? 'active-button' : 'inactive-button'}`}
         >
           {searchButton && (
@@ -120,7 +126,7 @@ function SearchBox({
           )}
           <span className="lnr lnr-magnifier" />
         </button>
-      </div>
+      </form>
     </div>
   )
 }
