@@ -47,6 +47,25 @@ export const useGetProfiles = (pageNumber, itemsPerPage, filters) => {
   return { profiles, totalPages, count }
 }
 
+// Perfil de outra pessoa, buscado pelo id do perfil que está na URL. Funciona com F5
+// e link direto. notFound fica true se o perfil não existe ou está oculto da busca.
+export const useGetPublicProfile = (id) => {
+  const [profile, setProfile] = useState()
+  const [notFound, setNotFound] = useState(false)
+
+  useEffect(() => {
+    if (!id) return
+    setProfile(undefined)
+    setNotFound(false)
+    api
+      .get(`/perfis/${id}`)
+      .then((response) => setProfile(response.data))
+      .catch(() => setNotFound(true))
+  }, [id])
+
+  return { profile, notFound }
+}
+
 export const useGetProfileById = (id, displayError = true) => {
   const [profile, setProfile] = useState()
 
