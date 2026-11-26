@@ -156,14 +156,20 @@ export const useJobRoutes = () => {
     }
   }
 
+  // Salva o voto (like/dislike/none) numa vaga recomendada. Devolve true se deu certo.
   const feedbackJobs = async (jobId, status) => {
-    const response = await api.put(`/vagas/${jobId}`, {
-      status,
-    })
-
-    if (response.data.message) {
-      if (response.data.error) toast.error(response.data.message)
-      else toast.success(response.data.message)
+    try {
+      const response = await api.put(`/vagas/${jobId}`, { status })
+      if (response.data.error) {
+        toast.error(response.data.message)
+        return false
+      }
+      return true
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'Não foi possível salvar sua avaliação.'
+      )
+      return false
     }
   }
 
