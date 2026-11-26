@@ -7,17 +7,13 @@ import './style.css'
 import Tag from '../../../components/Tag'
 import Text from '../../../components/Text'
 import { translate } from '../../../utils/translations'
-import useProfiles from '../../../hooks/useProfiles'
 
 function ProfileCard({ profile }) {
   const { id, user, technologies } = profile
 
   const navigate = useNavigate()
 
-  const { setSelectedProfile } = useProfiles()
-
   const onProfileClick = () => {
-    setSelectedProfile(profile)
     navigate(`/verperfil/${id}`)
   }
 

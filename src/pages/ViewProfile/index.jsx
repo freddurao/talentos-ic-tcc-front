@@ -5,9 +5,12 @@ import ButtonRectangle from '../../components/Buttons/ButtonRectangle'
 import Layout from '../../components/Layout'
 import Tag from '../../components/Tag'
 import Text from '../../components/Text'
-import { useGetProfileById, useGetOwnProfile } from '../../hooks/profile'
+import {
+  useGetProfileById,
+  useGetOwnProfile,
+  useGetPublicProfile,
+} from '../../hooks/profile'
 import useAuth from '../../hooks/useAuth'
-import useProfiles from '../../hooks/useProfiles'
 import { useGetUserById } from '../../hooks/user'
 import { scholarityLabel } from '../../utils/constants/project'
 import { localDate } from '../../utils/conversions'
@@ -21,7 +24,7 @@ function ViewProfile() {
   const navigate = useNavigate()
 
   const params = useParams()
-  const { userId } = useAuth()
+  const { userId, isIdle } = useAuth()
 
   const [email, setEmail] = useState('')
   const [birthDate, setBirthDate] = useState('')
@@ -31,8 +34,8 @@ function ViewProfile() {
   const [languages, setLanguages] = useState('')
   const [linkResume, setLinkResume] = useState('')
 
-  const { selectedProfile } = useProfiles()
-
+  // A rota recebe o id do usuário no próprio perfil (menu do avatar) e o id do
+  // perfil quando é o de outra pessoa (cards de /perfis e da vaga)
   const isOwnProfile = useMemo(() => userId === params.id, [userId, params])
   const bestJobs = useGetOwnProfile(isOwnProfile && params.id)
   const remoteUser = useGetUserById(isOwnProfile && params.id)
@@ -40,11 +43,15 @@ function ViewProfile() {
     isOwnProfile && remoteUser && remoteUser.profileId,
     false
   )
+  // Espera o login carregar (isIdle) para não buscar o próprio perfil como se fosse de outra pessoa
+  const { profile: publicProfile, notFound } = useGetPublicProfile(
+    !isIdle && !isOwnProfile && params.id
+  )
 
   const { user, profile } = useMemo(() => {
     if (isOwnProfile) return { user: remoteUser, profile: remoteProfile }
-    return { user: selectedProfile.user, profile: selectedProfile }
-  }, [isOwnProfile, remoteUser, remoteProfile, selectedProfile])
+    return { user: publicProfile && publicProfile.user, profile: publicProfile }
+  }, [isOwnProfile, remoteUser, remoteProfile, publicProfile])
 
   const userIsVisible = useMemo(
     () => (profile && profile.searchable) || isOwnProfile,
@@ -161,29 +168,34 @@ function ViewProfile() {
     <Layout>
       <div className="view-profile">
         <div className="card">
-          {user && (user.profileId === -1 || profile)
+          {!isOwnProfile && notFound
+            ? renderInfoText('Perfil não encontrado.')
+            : user && (user.profileId === -1 || profile)
             ? user.profileId === -1 || userIsVisible
               ? renderCard()
               : renderInfoText('Esse perfil não quer ser visualizado!')
             : renderInfoText('Carregando usuário e perfil...')}
         </div>
       </div>
-      <section id="main">
-        <div id="label">
-          <span>Vagas Recomendadas</span>
-        </div>
-        <div id="jobs-container">
-          <div id="jobs">
-            <div className="wrap">
-              {bestJobs.length > 0
-                ? bestJobs.map((job) => (
-                    <JobRecommendationCard data={job} key={job.id} />
-                  ))
-                : false}
+      {/* As recomendações são pessoais: só aparecem no próprio perfil */}
+      {isOwnProfile && (
+        <section id="main">
+          <div id="label">
+            <span>Vagas Recomendadas</span>
+          </div>
+          <div id="jobs-container">
+            <div id="jobs">
+              <div className="wrap">
+                {bestJobs.length > 0
+                  ? bestJobs.map((job) => (
+                      <JobRecommendationCard data={job} key={job.id} />
+                    ))
+                  : false}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </Layout>
   )
 }
