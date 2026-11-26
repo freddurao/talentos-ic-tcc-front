@@ -16,6 +16,7 @@ import TextInput from '../../../components/TextInput'
 import ConfirmModal from '../../../components/Modals/ConfirmModal'
 import { useGetUsers, useAdminRoutes } from '../../../hooks/admin'
 import { SelectBox } from '../../../components/FormElements'
+import useAuth from '../../../hooks/useAuth'
 
 function ManageUsers() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -24,10 +25,15 @@ function ManageUsers() {
 
   const { users, count, refresh } = useGetUsers()
   const { updateUser, deleteUser } = useAdminRoutes()
+  const { userId } = useAuth()
 
   // Modal States
   const [deleteModal, setDeleteModal] = useState({ opened: false, user: null })
   const [editModal, setEditModal] = useState({ opened: false, user: null })
+
+  // O admin não pode tirar o próprio cargo, se desativar nem se excluir: como não há
+  // tela para criar admins, o sistema poderia ficar sem administrador.
+  const isEditingSelf = editModal.user?.id === userId
 
   // Form States for Edit
   const [editData, setEditData] = useState({
@@ -171,6 +177,7 @@ function ManageUsers() {
                       onChange={(e) =>
                         setEditData({ ...editData, role: e.target.value })
                       }
+                      disabled={isEditingSelf}
                       options={[
                         { id: 1, value: 'COMMON', label: 'Candidato' },
                         { id: 2, value: 'ADMIN', label: 'Administrador' },
@@ -187,12 +194,22 @@ function ManageUsers() {
                           isActive: e.target.value === 'true',
                         })
                       }
+                      disabled={isEditingSelf}
                       options={[
                         { id: 1, value: 'true', label: 'Ativo' },
                         { id: 2, value: 'false', label: 'Inativo' },
                       ]}
                     />
                   </div>
+                  {isEditingSelf && (
+                    <div className="column is-12">
+                      <Text
+                        text="Você não pode alterar o seu próprio cargo nem o status da sua conta."
+                        size={13}
+                        className="has-text-grey"
+                      />
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -344,7 +361,12 @@ function ManageUsers() {
                   <button
                     type="button"
                     className="button is-white has-text-danger"
-                    title="Excluir"
+                    title={
+                      user.id === userId
+                        ? 'Você não pode excluir a sua própria conta'
+                        : 'Excluir'
+                    }
+                    disabled={user.id === userId}
                     onClick={() => handleDeleteClick(user)}
                   >
                     <FontAwesomeIcon icon={faTrashAlt} />
